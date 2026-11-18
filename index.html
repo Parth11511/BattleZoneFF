@@ -347,12 +347,16 @@ function goToTournaments() {
 }
 
 function showDetails(mode) {
-    alert(
-        mode + " tournament details are coming soon! " +
-        "This is currently a demo website."
-    );
+    if (mode === "Solo") {
+        window.location.href = "solo.html";
+    }
+    else if (mode === "Duo") {
+        window.location.href = "duo.html";
+    }
+    else if (mode === "Squad") {
+        window.location.href = "squad.html";
+    }
 }
-
 </script>
 
 <!-- REGISTRATION DEMO SECTION -->
