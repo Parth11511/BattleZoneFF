@@ -2,52 +2,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solo Championship | BattleZone FF</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b0b0b;color:white;font-family:Arial,sans-serif}
-header{padding:20px;background:#171717;border-bottom:1px solid #333}
-.logo{font-size:23px;font-weight:bold}
-.logo span{color:#ff6a00}
-.container{max-width:750px;margin:35px auto;padding:20px}
-.banner{background:linear-gradient(135deg,#351a08,#ff6a00);padding:35px 20px;border-radius:12px;text-align:center}
-.banner h1{font-size:32px}
-.card{background:#181818;padding:22px;border-radius:12px;margin-top:20px;border:1px solid #333}
-.info{padding:13px 0;border-bottom:1px solid #333;color:#bbb}
-.info strong{color:white}
-.status{color:#ff9a52;font-weight:bold}
-button{background:#ff6a00;color:white;border:0;padding:13px 20px;border-radius:7px;cursor:pointer;font-weight:bold}
-footer{text-align:center;color:#888;padding:25px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Championship | BattleZone FF</title>
+    <style>
+        body {
+            background: #101010;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px 15px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #1c1c1c;
+            border: 1px solid #ff6b00;
+            border-radius: 12px;
+        }
+        h1, h2 {
+            color: #ff6b00;
+        }
+        .details {
+            text-align: left;
+            line-height: 2.2;
+        }
+        button {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<header><div class="logo">BATTLE<span>ZONE</span> FF</div></header>
-<main class="container">
-<div class="banner">
-<h1>SOLO CHAMPIONSHIP</h1>
-<p>One player. One battle.</p>
-</div>
-<div class="card">
-<h2>Tournament Details</h2>
-<div class="info">Game Mode: <strong>Solo</strong></div>
-<div class="info">Players: <strong>1 Player</strong></div>
-<div class="info">Map: <strong>Bermuda</strong></div>
-<div class="info">Entry: <strong>Free Demo</strong></div>
-<div class="info">Date: <strong>Coming Soon</strong></div>
-<div class="info">Status: <span class="status">Coming Soon</span></div>
-<h3>Rules</h3>
-<p class="status">Tournament rules will be announced soon.</p>
-<h3>Match Schedule</h3>
-<p class="status">Match schedule coming soon.</p>
-<br>
-<button onclick="history.back()">Go Back</button>
-</div>
-<p style="color:#999;font-size:13px;margin-top:20px">
-DEMO ONLY: No real tournament, registration, payment or prize is active.
-</p>
-</main>
-<footer>© 2026 BattleZone FF</footer>
+    <div class="container">
+        <h1>SOLO CHAMPIONSHIP</h1>
+        <p>One player. One battle.</p>
+
+        <h2>Tournament Details</h2>
+
+        <div class="details">
+            <p>Game Mode: <b>Solo</b></p>
+            <p>Players: <b>1 Player</b></p>
+            <p>Map: <b>Bermuda</b></p>
+            <p>Entry: <b>Free Demo</b></p>
+            <p>Date: <b>Coming Soon</b></p>
+            <p>Status: <b>Coming Soon</b></p>
+        </div>
+
+        <h2>Rules</h2>
+        <p>Tournament rules will be announced soon.</p>
+
+        <h2>Match Schedule</h2>
+        <p>Match schedule coming soon.</p>
+
+        <br>
+        <button onclick="history.back()">Go Back</button>
+
+        <p style="font-size:12px;color:#aaa;margin-top:25px;">
+            Demo website only. No active tournament.
+        </p>
+    </div>
 </body>
 </html>
