@@ -355,6 +355,102 @@ function showDetails(mode) {
 
 </script>
 
+<!-- REGISTRATION DEMO SECTION -->
+<section class="container" id="registration">
+
+    <h2 class="section-title">Player Registration</h2>
+
+    <p class="section-subtitle">
+        Explore our sample registration form.
+    </p>
+
+    <div class="card">
+        <div class="card-content">
+
+            <form id="demoForm">
+
+                <label>Player Name</label>
+                <input type="text" id="playerName"
+                    placeholder="Enter player name" required>
+
+                <label>Free Fire UID</label>
+                <input type="text" id="playerUID"
+                    placeholder="Enter sample UID" required>
+
+                <label>Game Mode</label>
+                <select id="gameMode" required>
+                    <option value="">Select Game Mode</option>
+                    <option value="Solo">Solo</option>
+                    <option value="Duo">Duo</option>
+                    <option value="Squad">Squad</option>
+                </select>
+
+                <label>Team Name (Optional)</label>
+                <input type="text" id="teamName"
+                    placeholder="Enter team name">
+
+                <button type="submit">Submit Demo</button>
+
+            </form>
+
+            <div id="demoMessage"></div>
+
+            <p class="details" style="margin-top:15px">
+                DEMO ONLY: This form does not save or send
+                player information. No real registration is active.
+            </p>
+
+        </div>
+    </div>
+</section>
+
+<style>
+#registration label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: #ddd;
+}
+
+#registration input,
+#registration select {
+    width: 100%;
+    padding: 13px;
+    background: #252525;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 6px;
+    outline: none;
+}
+
+#registration input:focus,
+#registration select:focus {
+    border-color: #ff6a00;
+}
+
+#demoMessage {
+    margin-top: 18px;
+    color: #ff9a52;
+    font-weight: bold;
+}
+</style>
+
+<script>
+document.getElementById("demoForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("playerName").value;
+    const mode = document.getElementById("gameMode").value;
+
+    document.getElementById("demoMessage").textContent =
+        "Demo preview successful! Welcome, " + name +
+        ". Selected mode: " + mode +
+        ". No registration has been saved.";
+
+    document.getElementById("demoForm").reset();
+});
+</script>
+
 </body>
 </html>
 
