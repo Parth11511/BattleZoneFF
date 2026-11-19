@@ -218,19 +218,25 @@ footer {
 </header>
 
 <section class="hero" id="home">
-    <h1>ENTER THE <span>BATTLE</span></h1>
+    <div class="hero-content">
+        <p class="hero-tag">🔥 THE ULTIMATE GAMING ZONE</p>
 
-    <p>
-        Discover Free Fire community tournaments.
-        Choose your mode, explore tournament details
-        and get ready to compete.
-    </p>
+        <h1>
+            BATTLEZONE <span>FF</span>
+        </h1>
 
-    <button onclick="goToTournaments()">
-        Explore Tournaments
-    </button>
+        <p class="hero-description">
+            Enter the battlefield, explore Solo, Duo and Squad
+            tournaments, and experience the Free Fire community.
+        </p>
+
+        <button onclick="goToTournaments()">
+            EXPLORE TOURNAMENTS →
+        </button>
+
+        <p class="hero-note">⚡ DEMO PLATFORM • NO ACTIVE TOURNAMENTS</p>
+    </div>
 </section>
-
 <section class="container" id="tournaments">
 
     <h2 class="section-title">Upcoming Tournaments</h2>
@@ -439,6 +445,80 @@ function showDetails(mode) {
     margin-top: 18px;
     color: #ff9a52;
     font-weight: bold;
+}
+    .hero {
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background:
+        radial-gradient(circle at center, #3b1608 0%, #100b09 45%, #050505 100%);
+    border-bottom: 2px solid #ff5a00;
+}
+
+.hero-content {
+    max-width: 850px;
+}
+
+.hero-tag {
+    color: #ff6a00;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    font-weight: 900;
+    color: white;
+    margin: 20px 0;
+    letter-spacing: 2px;
+}
+
+.hero h1 span {
+    color: #ff5a00;
+}
+
+.hero-description {
+    color: #cccccc;
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 0 auto 28px;
+}
+
+.hero button {
+    background: #ff5a00;
+    color: white;
+    border: none;
+    padding: 16px 30px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.hero button:hover {
+    background: #ff7b28;
+    transform: translateY(-3px);
+}
+
+.hero-note {
+    color: #999;
+    font-size: 12px;
+    margin-top: 22px;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        min-height: 430px;
+        padding: 45px 16px;
+    }
+
+    .hero-description {
+        font-size: 15px;
+    }
 }
 </style>
 
