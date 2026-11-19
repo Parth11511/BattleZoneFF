@@ -96,75 +96,79 @@ nav a {
 .tournament-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 25px;
 }
 
 .card {
-    background: #171717;
-    border: 1px solid #292929;
-    border-radius: 12px;
+    background: linear-gradient(145deg, #1c1c1c, #101010);
+    border: 1px solid #393939;
+    border-radius: 14px;
     overflow: hidden;
-    transition: 0.3s;
+    transition: all 0.35s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
     border-color: #ff6a00;
+    box-shadow: 0 10px 30px rgba(255,106,0,0.25);
 }
 
 .card-banner {
-    height: 130px;
-    background: linear-gradient(135deg, #381b08, #ff6a00);
+    height: 150px;
+    background: linear-gradient(135deg, #251006, #ff6a00);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 50px;
+    font-size: 55px;
 }
 
 .card-content {
-    padding: 20px;
+    padding: 22px;
 }
 
 .tag {
-    background: #282828;
+    background: #38200f;
     color: #ff8b3d;
-    padding: 6px 10px;
+    padding: 7px 12px;
     border-radius: 20px;
     font-size: 12px;
+    font-weight: bold;
 }
 
 .card h3 {
-    margin: 15px 0;
-    font-size: 22px;
+    margin: 18px 0;
+    font-size: 24px;
+    color: white;
 }
 
 .details {
     color: #aaa;
     font-size: 14px;
-    line-height: 2;
+    line-height: 2.2;
 }
 
 .details strong {
-    color: white;
+    color: #ff8b3d;
 }
 
 .card button {
     width: 100%;
-    padding: 12px;
-    margin-top: 18px;
-    background: #ff6a00;
+    padding: 14px;
+    margin-top: 20px;
+    background: linear-gradient(90deg, #ff6a00, #ff8b3d);
     border: none;
-    border-radius: 6px;
+    border-radius: 7px;
     color: white;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.card button:hover,
-.hero button:hover {
-    background: #e65f00;
+.card button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 18px rgba(255,106,0,0.35);
 }
-
 .notice {
     margin-top: 25px;
     background: #151515;
