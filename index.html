@@ -541,7 +541,116 @@ document.getElementById("demoForm").addEventListener("submit", function(event) {
     document.getElementById("demoForm").reset();
 });
 </script>
+<style>
+/* ===== BATTLEZONE GAMING HEADER ===== */
 
+header {
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 106, 0, 0.4);
+    box-shadow: 0 4px 25px rgba(255, 106, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 12px rgba(255, 106, 0, 0.2);
+}
+
+nav a {
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #ff6a00;
+}
+
+/* ===== HERO SECTION ===== */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at 50% 50%,
+            rgba(255, 85, 0, 0.18),
+            transparent 65%
+        ),
+        linear-gradient(180deg, #140a05, #080808 85%);
+    border-bottom: 1px solid rgba(255, 106, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero h1 {
+    text-shadow: 0 0 25px rgba(255, 106, 0, 0.15);
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid rgba(255, 106, 0, 0.35);
+    border-radius: 30px;
+    background: rgba(255, 106, 0, 0.08);
+    font-size: 12px;
+}
+
+/* ===== GAMING BUTTON ===== */
+
+.hero button {
+    box-shadow: 0 0 20px rgba(255, 90, 0, 0.2);
+}
+
+.hero button:hover {
+    box-shadow: 0 0 30px rgba(255, 90, 0, 0.5);
+    transform: translateY(-3px) scale(1.03);
+}
+
+/* ===== ANIMATION ===== */
+
+.hero-content {
+    animation: heroEnter 0.8s ease-out;
+}
+
+@keyframes heroEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+    .logo {
+        font-size: 22px;
+    }
+
+    .hero h1 {
+        letter-spacing: 1px;
+    }
+
+    .hero-tag {
+        letter-spacing: 1px;
+        font-size: 10px;
+    }
+
+    .hero button {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+</style>
 </body>
 </html>
 
