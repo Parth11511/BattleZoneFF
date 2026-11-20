@@ -1,1 +1,308 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BattleZone FF - Admin Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+header {
+    background: #151515;
+    border: 1px solid #ff6500;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    color: #ff6500;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #aaa;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: #171717;
+    border: 1px solid #333;
+    padding: 22px;
+    border-radius: 12px;
+}
+
+.stat-card h3 {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-card p {
+    color: #ff6500;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.panel {
+    background: #151515;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.panel h2 {
+    color: #ff6500;
+    margin-bottom: 18px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+select {
+    background: #222;
+    color: white;
+    padding: 12px;
+    border: 1px solid #ff6500;
+    border-radius: 7px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 14px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+th {
+    color: #ff6500;
+}
+
+.status {
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    background: #333;
+    color: #ffb000;
+}
+
+.note {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 15px;
+    color: #ff6500;
+    text-decoration: none;
+}
+
+@media(max-width:600px) {
+    body {
+        padding: 10px;
+    }
+
+    .panel {
+        padding: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>🔥 BattleZone FF</h1>
+    <p>Admin Dashboard - Demo Version</p>
+</header>
+
+<div class="stats">
+
+    <div class="stat-card">
+        <h3>Total Registrations</h3>
+        <p id="totalCount">4</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Solo</h3>
+        <p id="soloCount">1</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Duo</h3>
+        <p id="duoCount">1</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Squad</h3>
+        <p id="squadCount">2</p>
+    </div>
+
+</div>
+
+<div class="panel">
+
+    <h2>Registration Management</h2>
+
+    <div class="controls">
+
+        <select id="modeFilter">
+            <option value="All">All Modes</option>
+            <option value="Solo">Solo</option>
+            <option value="Duo">Duo</option>
+            <option value="Squad">Squad</option>
+        </select>
+
+        <select id="statusFilter">
+            <option value="All">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+
+    </div>
+
+    <div class="table-wrap">
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Player / Team</th>
+                    <th>Mode</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="registrationList"></tbody>
+
+        </table>
+    </div>
+
+    <p class="note">
+        DEMO ONLY: These are fictional sample registrations.
+        No real player information is stored.
+    </p>
+
+</div>
+
+<a class="back" href="index.html">← Back to Homepage</a>
+
+</div>
+
+<script>
+
+const registrations = [
+    {id: 1, name: "Player Alpha", team: "Team Alpha", mode: "Solo", status: "Pending"},
+    {id: 2, name: "Player Bravo", team: "Team Bravo", mode: "Duo", status: "Approved"},
+    {id: 3, name: "Player Charlie", team: "Team Charlie", mode: "Squad", status: "Pending"},
+    {id: 4, name: "Player Delta", team: "Team Delta", mode: "Squad", status: "Rejected"}
+];
+
+function updateDashboard() {
+
+    document.getElementById("totalCount").textContent =
+        registrations.length;
+
+    document.getElementById("soloCount").textContent =
+        registrations.filter(r => r.mode === "Solo").length;
+
+    document.getElementById("duoCount").textContent =
+        registrations.filter(r => r.mode === "Duo").length;
+
+    document.getElementById("squadCount").textContent =
+        registrations.filter(r => r.mode === "Squad").length;
+
+}
+
+function displayRegistrations() {
+
+    const mode = document.getElementById("modeFilter").value;
+    const status = document.getElementById("statusFilter").value;
+
+    const filtered = registrations.filter(r => {
+        return (mode === "All" || r.mode === mode) &&
+               (status === "All" || r.status === status);
+    });
+
+    const list = document.getElementById("registrationList");
+
+    list.innerHTML = "";
+
+    filtered.forEach(r => {
+
+        const tr = document.createElement("tr");
+
+        [r.id, r.team, r.mode, r.status].forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.appendChild(td);
+        });
+
+        list.appendChild(tr);
+
+    });
+
+    if (filtered.length === 0) {
+        list.innerHTML =
+            '<tr><td colspan="4">No demo registrations found.</td></tr>';
+    }
+
+}
+
+document.getElementById("modeFilter")
+    .addEventListener("change", displayRegistrations);
+
+document.getElementById("statusFilter")
+    .addEventListener("change", displayRegistrations);
+
+updateDashboard();
+displayRegistrations();
+
+</script>
+
+</body>
+</html>
+
