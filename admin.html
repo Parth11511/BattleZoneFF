@@ -33,6 +33,7 @@ th{color:#ff6500}
 .Rejected{background:#4a1717;color:#ff7777}
 button{border:none;padding:10px 13px;border-radius:6px;cursor:pointer;font-weight:bold;margin:3px}
 button:hover{opacity:.8}
+button:disabled{opacity:.4;cursor:not-allowed}
 .login-btn,.logout-btn,.close-btn{background:#ff6500;color:white}
 .view-btn{background:#333;color:white}
 .approve-btn{background:#16833b;color:white}
@@ -64,16 +65,20 @@ body{padding:10px}
 
 <div id="loginScreen">
     <h1>🔥 BattleZone FF</h1>
-    <p>Admin Login</p>
+    <p>Secure Admin Login</p>
 
     <form id="loginForm">
-        <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username" required>
-        <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password" required>
+        <input type="email" id="adminUsername"
+        placeholder="Admin Email" autocomplete="username" required>
+
+        <input type="password" id="adminPassword"
+        placeholder="Admin Password" autocomplete="current-password" required>
+
         <button type="submit" class="login-btn">Login to Dashboard</button>
     </form>
 
     <p id="loginError"></p>
-    <p class="note">Demo login only. Do not use real passwords here.</p>
+    <p class="note">Firebase authenticated admin access.</p>
 </div>
 
 <div id="dashboard">
@@ -82,9 +87,9 @@ body{padding:10px}
 <header>
     <div>
         <h1>🔥 BattleZone FF</h1>
-        <p>Admin Dashboard - Demo Version</p>
+        <p>Secure Admin Dashboard</p>
     </div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <button class="logout-btn" id="logoutButton">Logout</button>
 </header>
 
 <div class="stats">
@@ -132,10 +137,8 @@ body{padding:10px}
         </table>
     </div>
 
-    <p class="note">
-        DEMO ONLY: Use fictional test information.
-        Registrations and status changes are stored only in this browser.
-        This is not a secure server or real tournament system.
+    <p class="note" id="databaseMessage">
+        Connecting to Firebase...
     </p>
 </div>
 
@@ -148,166 +151,191 @@ body{padding:10px}
     <div class="modal-content">
         <h2>Registration Details</h2>
         <div id="detailsContent"></div>
-        <button class="close-btn" onclick="closeDetails()">Close</button>
+        <button class="close-btn" id="closeButton">Close</button>
     </div>
 </div>
 
-<script>
+<script type="module">
 
-// DEMO LOGIN ONLY - NOT SECURE AUTHENTICATION
-const DEMO_USERNAME = "admin";
-const DEMO_PASSWORD = "BattleZone123";
+import { auth, db } from "./firebase.js";
 
-const STORAGE_KEY = "battlezoneDemoRegistrations";
+import {
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+
+import {
+    collection,
+    onSnapshot,
+    doc,
+    updateDoc
+} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+// This UID is checked again by Firestore Security Rules.
+const ADMIN_UID = "qoqRGXJz2NaVk6tQn6lRMyPSgh32";
 
 const loginScreen = document.getElementById("loginScreen");
 const dashboard = document.getElementById("dashboard");
+const loginError = document.getElementById("loginError");
+const databaseMessage = document.getElementById("databaseMessage");
 
-// FICTIONAL SAMPLE REGISTRATIONS
-const sampleRegistrations = [
-    {
-        id: 1,
-        name: "Player Alpha",
-        gameName: "Alpha FF",
-        uid: "DEMO1001",
-        team: "Solo Player",
-        mode: "Solo",
-        teammates: [],
-        status: "Pending"
-    },
-    {
-        id: 2,
-        name: "Player Bravo",
-        gameName: "Bravo FF",
-        uid: "DEMO1002",
-        team: "Team Bravo",
-        mode: "Duo",
-        teammates: [{name:"Demo Mate 1",uid:"DEMO2001"}],
-        status: "Approved"
-    },
-    {
-        id: 3,
-        name: "Player Charlie",
-        gameName: "Charlie FF",
-        uid: "DEMO1003",
-        team: "Team Charlie",
-        mode: "Squad",
-        teammates: [
-            {name:"Demo Mate 1",uid:"DEMO3001"},
-            {name:"Demo Mate 2",uid:"DEMO3002"},
-            {name:"Demo Mate 3",uid:"DEMO3003"}
-        ],
-        status: "Pending"
-    },
-    {
-        id: 4,
-        name: "Player Delta",
-        gameName: "Delta FF",
-        uid: "DEMO1004",
-        team: "Team Delta",
-        mode: "Squad",
-        teammates: [
-            {name:"Demo Mate 1",uid:"DEMO4001"},
-            {name:"Demo Mate 2",uid:"DEMO4002"},
-            {name:"Demo Mate 3",uid:"DEMO4003"}
-        ],
-        status: "Rejected"
-    }
-];
-
-// READ HOMEPAGE REGISTRATIONS
-function getSavedRegistrations() {
-    try {
-        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error("Registration data could not be read:", error);
-        return [];
-    }
-}
-
-// NORMALIZE REGISTRATION FIELDS
-function normalizeRegistration(r) {
-    const teammates = Array.isArray(r.teammates) ? r.teammates : [];
-
-    return {
-        ...r,
-        id: r.id ?? ("demo-" + Date.now() + "-" + Math.random()),
-        name: r.name || r.playerName || r.fullName || "Demo Player",
-        gameName: r.gameName || r.game_name || "Not provided",
-        uid: r.uid || r.gameUID || r.freeFireUID || "Not provided",
-        team: r.team || r.teamName || r.gameName || r.name || "Demo Team",
-        mode: ["Solo","Duo","Squad"].includes(r.mode) ? r.mode : "Solo",
-        teammates: teammates,
-        status: ["Pending","Approved","Rejected"].includes(r.status) ? r.status : "Pending"
-    };
-}
-
-// COMBINE SAMPLE + HOMEPAGE REGISTRATIONS
 let registrations = [];
+let unsubscribeRegistrations = null;
 
-function loadRegistrations() {
-    const saved = getSavedRegistrations().map(normalizeRegistration);
-    registrations = [...sampleRegistrations, ...saved];
-}
+const loginForm = document.getElementById("loginForm");
 
-// LOGIN
-document.getElementById("loginForm").addEventListener("submit", function(e) {
+loginForm.addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    const username = document.getElementById("adminUsername").value;
+    const email = document.getElementById("adminUsername").value.trim();
     const password = document.getElementById("adminPassword").value;
 
-    if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-        loginScreen.style.display = "none";
-        dashboard.style.display = "block";
+    loginError.textContent = "Signing in...";
 
-        document.getElementById("loginError").textContent = "";
+    try {
+        const result = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-        loadRegistrations();
-        updateDashboard();
-        displayRegistrations();
-    } else {
-        document.getElementById("loginError").textContent =
-            "Incorrect username or password!";
+        if (result.user.uid !== ADMIN_UID) {
+            await signOut(auth);
+            loginError.textContent = "This account is not an authorized admin.";
+            return;
+        }
+
+        loginError.textContent = "";
+
+    } catch (error) {
+        console.error(error);
+        loginError.textContent = "Login failed. Check your email and password.";
     }
 });
 
-function logout() {
-    dashboard.style.display = "none";
+// Verify the signed-in user every time authentication changes.
+onAuthStateChanged(auth, async function(user) {
+
+    if (!user) {
+        stopRegistrationListener();
+        showLogin();
+        return;
+    }
+
+    if (user.uid !== ADMIN_UID) {
+        await signOut(auth);
+        loginError.textContent = "Unauthorized account.";
+        return;
+    }
+
+    showDashboard();
+    startRegistrationListener();
+});
+
+function showLogin() {
     loginScreen.style.display = "block";
-    document.getElementById("adminPassword").value = "";
-    document.getElementById("loginError").textContent = "";
-    closeDetails();
+    dashboard.style.display = "none";
 }
 
-// UPDATE STATISTICS
+function showDashboard() {
+    loginScreen.style.display = "none";
+    dashboard.style.display = "block";
+}
+
+async function logout() {
+    try {
+        await signOut(auth);
+        document.getElementById("adminPassword").value = "";
+        loginError.textContent = "";
+    } catch (error) {
+        console.error(error);
+        alert("Logout failed. Please try again.");
+    }
+}
+
+document.getElementById("logoutButton").addEventListener("click", logout);
+
+// Load registrations from Firestore.
+function startRegistrationListener() {
+
+    stopRegistrationListener();
+
+    databaseMessage.textContent = "Loading registrations from Firebase...";
+
+    unsubscribeRegistrations = onSnapshot(
+        collection(db, "registrations"),
+
+        function(snapshot) {
+            registrations = snapshot.docs.map(item => ({
+                id: item.id,
+                ...item.data()
+            }));
+
+            updateDashboard();
+            displayRegistrations();
+
+            databaseMessage.textContent =
+                "Connected to Firebase Firestore. " +
+                registrations.length + " registration(s) loaded.";
+        },
+
+        function(error) {
+            console.error("Firestore error:", error);
+
+            databaseMessage.textContent =
+                "Could not load registrations. Check Firestore Security Rules.";
+        }
+    );
+}
+
+function stopRegistrationListener() {
+    if (unsubscribeRegistrations) {
+        unsubscribeRegistrations();
+        unsubscribeRegistrations = null;
+    }
+}
+
+// Update statistics.
 function updateDashboard() {
     document.getElementById("totalCount").textContent = registrations.length;
+
     document.getElementById("soloCount").textContent =
         registrations.filter(r => r.mode === "Solo").length;
+
     document.getElementById("duoCount").textContent =
         registrations.filter(r => r.mode === "Duo").length;
+
     document.getElementById("squadCount").textContent =
         registrations.filter(r => r.mode === "Squad").length;
+
     document.getElementById("approvedCount").textContent =
         registrations.filter(r => r.status === "Approved").length;
+
     document.getElementById("pendingCount").textContent =
         registrations.filter(r => r.status === "Pending").length;
 }
 
-// DISPLAY REGISTRATIONS
+// Display registrations.
 function displayRegistrations() {
+
     const mode = document.getElementById("modeFilter").value;
     const status = document.getElementById("statusFilter").value;
     const search = document.getElementById("searchInput").value.toLowerCase();
 
     const filtered = registrations.filter(r => {
+
         const matchesMode = mode === "All" || r.mode === mode;
         const matchesStatus = status === "All" || r.status === status;
 
         const searchText = [
-            r.name, r.gameName, r.uid, r.team, r.mode
+            r.name,
+            r.playerName,
+            r.gameName,
+            r.uid,
+            r.team,
+            r.teamName,
+            r.mode
         ].join(" ").toLowerCase();
 
         return matchesMode && matchesStatus && searchText.includes(search);
@@ -317,21 +345,26 @@ function displayRegistrations() {
     list.replaceChildren();
 
     filtered.forEach(r => {
+
         const tr = document.createElement("tr");
 
         const id = document.createElement("td");
         id.textContent = r.id;
 
         const team = document.createElement("td");
-        team.textContent = r.team;
+        team.textContent =
+            r.team || r.teamName || r.name || r.playerName || "Demo Player";
 
         const modeCell = document.createElement("td");
-        modeCell.textContent = r.mode;
+        modeCell.textContent = r.mode || "Solo";
 
         const statusCell = document.createElement("td");
         const badge = document.createElement("span");
-        badge.className = "status " + r.status;
-        badge.textContent = r.status;
+        const currentStatus = ["Pending", "Approved", "Rejected"].includes(r.status)
+            ? r.status : "Pending";
+
+        badge.className = "status " + currentStatus;
+        badge.textContent = currentStatus;
         statusCell.appendChild(badge);
 
         const actions = document.createElement("td");
@@ -353,22 +386,26 @@ function displayRegistrations() {
 
         actions.append(viewButton, approveButton, rejectButton);
         tr.append(id, team, modeCell, statusCell, actions);
+
         list.appendChild(tr);
     });
 
     if (filtered.length === 0) {
         const tr = document.createElement("tr");
         const td = document.createElement("td");
+
         td.colSpan = 5;
-        td.textContent = "No registrations found.";
+        td.textContent = "No Firebase registrations found.";
+
         tr.appendChild(td);
         list.appendChild(tr);
     }
 }
 
-// VIEW DETAILS
+// View registration details.
 function viewDetails(id) {
-    const r = registrations.find(item => String(item.id) === String(id));
+
+    const r = registrations.find(item => item.id === id);
     if (!r) return;
 
     const content = document.getElementById("detailsContent");
@@ -377,31 +414,35 @@ function viewDetails(id) {
     function addDetail(label, value) {
         const p = document.createElement("p");
         const strong = document.createElement("strong");
+
         strong.textContent = label + ": ";
-        p.append(strong, document.createTextNode(String(value ?? "Not provided")));
+
+        p.append(
+            strong,
+            document.createTextNode(String(value ?? "Not provided"))
+        );
+
         content.appendChild(p);
     }
 
-    addDetail("Player Name", r.name);
+    addDetail("Player Name", r.name || r.playerName);
     addDetail("In-game Name", r.gameName);
     addDetail("Free Fire UID", r.uid);
     addDetail("Game Mode", r.mode);
-    addDetail("Team Name", r.team);
+    addDetail("Team Name", r.team || r.teamName);
+    addDetail("Status", r.status);
 
-    r.teammates.forEach((mate, index) => {
+    const teammates = Array.isArray(r.teammates) ? r.teammates : [];
+
+    teammates.forEach((mate, index) => {
         if (typeof mate === "string") {
             addDetail("Teammate " + (index + 1), mate);
         } else {
-            addDetail("Teammate " + (index + 1), mate.name || "Not provided");
-            if (mate.uid) addDetail("Teammate UID", mate.uid);
+            addDetail("Teammate " + (index + 1), mate.name);
         }
     });
 
-    addDetail("Status", r.status);
-
-    if (r.submittedAt) {
-        addDetail("Submitted At", r.submittedAt);
-    }
+    addDetail("Submitted At", r.submittedAt || "Not provided");
 
     document.getElementById("detailsModal").style.display = "flex";
 }
@@ -410,29 +451,30 @@ function closeDetails() {
     document.getElementById("detailsModal").style.display = "none";
 }
 
-// SAVE STATUS CHANGES
-function changeStatus(id, newStatus) {
-    const r = registrations.find(item => String(item.id) === String(id));
-    if (!r) return;
+document.getElementById("closeButton").addEventListener("click", closeDetails);
 
-    r.status = newStatus;
+// Update registration status in Firestore.
+async function changeStatus(id, newStatus) {
 
-    // Save only homepage registrations.
-    const saved = getSavedRegistrations();
-    const updated = saved.map(item => {
-        if (String(item.id) === String(id)) {
-            return {...item, status:newStatus};
-        }
-        return item;
-    });
+    if (!["Approved", "Rejected"].includes(newStatus)) return;
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    try {
+        await updateDoc(doc(db, "registrations", id), {
+            status: newStatus
+        });
 
-    updateDashboard();
-    displayRegistrations();
+        databaseMessage.textContent =
+            "Registration status updated successfully.";
+
+    } catch (error) {
+        console.error(error);
+
+        databaseMessage.textContent =
+            "Status update failed. Check your connection and Firestore Rules.";
+    }
 }
 
-// SEARCH AND FILTERS
+// Search and filters.
 document.getElementById("modeFilter")
     .addEventListener("change", displayRegistrations);
 
@@ -441,15 +483,6 @@ document.getElementById("statusFilter")
 
 document.getElementById("searchInput")
     .addEventListener("input", displayRegistrations);
-
-// Refresh registrations when another tab updates homepage data.
-window.addEventListener("storage", function(event) {
-    if (event.key === STORAGE_KEY && dashboard.style.display === "block") {
-        loadRegistrations();
-        updateDashboard();
-        displayRegistrations();
-    }
-});
 
 </script>
 </body>
