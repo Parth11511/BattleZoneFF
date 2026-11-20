@@ -373,12 +373,13 @@ function showDetails(mode) {
 </script>
 
 <!-- REGISTRATION DEMO SECTION -->
+
 <section class="container" id="registration">
 
     <h2 class="section-title">Player Registration</h2>
 
     <p class="section-subtitle">
-        Explore our sample registration form.
+        Register for your preferred tournament mode.
     </p>
 
     <div class="card">
@@ -386,15 +387,31 @@ function showDetails(mode) {
 
             <form id="demoForm">
 
-                <label>Player Name</label>
-                <input type="text" id="playerName"
-                    placeholder="Enter player name" required>
+                <label for="playerName">Player Name</label>
+                <input
+                    type="text"
+                    id="playerName"
+                    placeholder="Enter your name"
+                    required
+                >
 
-                <label>Free Fire UID</label>
-                <input type="text" id="playerUID"
-                    placeholder="Enter sample UID" required>
+                <label for="gameName">In-game Name</label>
+                <input
+                    type="text"
+                    id="gameName"
+                    placeholder="Enter your Free Fire name"
+                    required
+                >
 
-                <label>Game Mode</label>
+                <label for="playerUID">Free Fire UID</label>
+                <input
+                    type="text"
+                    id="playerUID"
+                    placeholder="Enter your Free Fire UID"
+                    required
+                >
+
+                <label for="gameMode">Game Mode</label>
                 <select id="gameMode" required>
                     <option value="">Select Game Mode</option>
                     <option value="Solo">Solo</option>
@@ -402,9 +419,18 @@ function showDetails(mode) {
                     <option value="Squad">Squad</option>
                 </select>
 
-                <label>Team Name (Optional)</label>
-                <input type="text" id="teamName"
-                    placeholder="Enter team name">
+                <div id="teamFields" style="display:none;">
+
+                    <label for="teamName">Team Name</label>
+                    <input
+                        type="text"
+                        id="teamName"
+                        placeholder="Enter team name"
+                    >
+
+                    <div id="teammateFields"></div>
+
+                </div>
 
                 <button type="submit">Submit Demo</button>
 
@@ -412,14 +438,81 @@ function showDetails(mode) {
 
             <div id="demoMessage"></div>
 
-            <p class="details" style="margin-top:15px">
+            <p class="details" style="margin-top:15px;">
                 DEMO ONLY: This form does not save or send
                 player information. No real registration is active.
             </p>
 
         </div>
     </div>
+
 </section>
+
+<script>
+const gameMode = document.getElementById("gameMode");
+const teamFields = document.getElementById("teamFields");
+const teammateFields = document.getElementById("teammateFields");
+const teamName = document.getElementById("teamName");
+
+gameMode.addEventListener("change", function () {
+
+    const mode = gameMode.value;
+
+    teamFields.style.display = "none";
+    teammateFields.innerHTML = "";
+    teamName.required = false;
+
+    if (mode === "Duo" || mode === "Squad") {
+
+        teamFields.style.display = "block";
+        teamName.required = true;
+
+        const totalTeammates = mode === "Duo" ? 1 : 3;
+
+        for (let i = 1; i <= totalTeammates; i++) {
+
+            teammateFields.innerHTML += `
+                <h3 style="margin-top:20px;">
+                    Teammate ${i}
+                </h3>
+
+                <label>Teammate ${i} Name</label>
+                <input
+                    type="text"
+                    name="teammateName${i}"
+                    placeholder="Enter teammate name"
+                    required
+                >
+
+                <label>Teammate ${i} Free Fire UID</label>
+                <input
+                    type="text"
+                    name="teammateUID${i}"
+                    placeholder="Enter teammate UID"
+                    required
+                >
+            `;
+        }
+    }
+});
+
+document.getElementById("demoForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    document.getElementById("demoMessage").innerHTML = `
+        <p style="color:#ff9800; margin-top:15px;">
+            Demo form submitted successfully!
+            No information has been saved or sent.
+        </p>
+    `;
+
+    this.reset();
+    teamFields.style.display = "none";
+    teammateFields.innerHTML = "";
+    teamName.required = false;
+});
+</script>
 
 <style>
 #registration label {
