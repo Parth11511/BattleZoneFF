@@ -13,6 +13,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: #0b0b0b;
@@ -21,16 +25,22 @@ body {
 
 header {
     padding: 20px;
-    background: #141414;
-    border-bottom: 1px solid #292929;
+    background: rgba(10,10,10,0.95);
+    border-bottom: 1px solid rgba(255,106,0,0.4);
+    box-shadow: 0 4px 25px rgba(255,106,0,0.08);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
 }
 
 .logo {
-    font-size: 23px;
+    font-size: 26px;
     font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .logo span {
@@ -42,39 +52,126 @@ nav a {
     text-decoration: none;
     margin-left: 15px;
     font-size: 14px;
+    transition: 0.3s;
 }
 
-.hero {
-    text-align: center;
-    padding: 65px 20px 45px;
-    background: linear-gradient(180deg, #201207, #0b0b0b);
-}
-
-.hero h1 {
-    font-size: 38px;
-    margin-bottom: 15px;
-}
-
-.hero h1 span {
+nav a:hover {
     color: #ff6a00;
 }
 
-.hero p {
-    color: #aaa;
-    max-width: 600px;
-    margin: auto;
-    line-height: 1.6;
+.hero {
+    min-height: 580px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(255,85,0,0.18), transparent 65%),
+        linear-gradient(180deg, #140a05, #080808 85%);
+    border-bottom: 1px solid rgba(255,106,0,0.5);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: #ff5a00;
+    filter: blur(150px);
+    opacity: 0.18;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.hero-content {
+    max-width: 850px;
+    animation: heroEnter 0.8s ease-out;
+}
+
+@keyframes heroEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid rgba(255,106,0,0.35);
+    border-radius: 30px;
+    background: rgba(255,106,0,0.08);
+    color: #ff6a00;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 12px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    font-weight: 900;
+    color: white;
+    margin: 20px 0;
+    letter-spacing: 2px;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255,90,0,0.15);
+    }
+    to {
+        text-shadow: 0 0 28px rgba(255,90,0,0.4);
+    }
+}
+
+.hero h1 span {
+    color: #ff5a00;
+}
+
+.hero-description {
+    color: #ccc;
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 0 auto 28px;
+    letter-spacing: 0.4px;
 }
 
 .hero button {
-    margin-top: 25px;
-    padding: 13px 24px;
-    background: #ff6a00;
+    margin-top: 10px;
+    background: #ff5a00;
     color: white;
     border: none;
-    border-radius: 7px;
+    padding: 16px 30px;
     font-weight: bold;
     cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(255,90,0,0.2);
+}
+
+.hero button:hover {
+    background: #ff7b28;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 30px rgba(255,90,0,0.5);
+}
+
+.hero-note {
+    color: #999;
+    font-size: 12px;
+    margin-top: 22px;
+    letter-spacing: 2px;
 }
 
 .container {
@@ -84,62 +181,71 @@ nav a {
 }
 
 .section-title {
-    font-size: 25px;
-    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    border-left: 4px solid #ff6a00;
+    padding-left: 14px;
+    margin-bottom: 12px;
 }
 
 .section-subtitle {
-    color: #999;
+    color: #aaa;
+    line-height: 1.8;
     margin-bottom: 25px;
 }
 
 .tournament-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(3,1fr);
+    gap: 28px;
 }
 
 .card {
-    background: linear-gradient(145deg, #1c1c1c, #101010);
-    border: 1px solid #393939;
-    border-radius: 14px;
+    position: relative;
+    background: linear-gradient(145deg,#1c1714,#090909);
+    border: 1px solid #493020;
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 0.35s ease;
+    transition: 0.35s;
     box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
 .card:hover {
     transform: translateY(-10px);
     border-color: #ff6a00;
-    box-shadow: 0 10px 30px rgba(255,106,0,0.25);
+    box-shadow: 0 12px 35px rgba(255,106,0,0.25);
 }
 
 .card-banner {
-    height: 150px;
-    background: linear-gradient(135deg, #251006, #ff6a00);
+    height: 165px;
+    background: radial-gradient(circle,#592408,#1a0c05 70%);
+    border-bottom: 1px solid #63300f;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 55px;
+    font-size: 65px;
 }
 
 .card-content {
-    padding: 22px;
+    padding: 25px;
 }
 
 .tag {
-    background: #38200f;
+    display: inline-block;
+    border: 1px solid #a94a13;
+    background: rgba(255,106,0,0.12);
     color: #ff8b3d;
     padding: 7px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .card h3 {
     margin: 18px 0;
-    font-size: 24px;
-    color: white;
+    font-size: 23px;
 }
 
 .details {
@@ -156,23 +262,28 @@ nav a {
     width: 100%;
     padding: 14px;
     margin-top: 20px;
-    background: linear-gradient(90deg, #ff6a00, #ff8b3d);
+    background: linear-gradient(90deg,#ff6a00,#ff8b3d);
     border: none;
-    border-radius: 7px;
+    border-radius: 8px;
     color: white;
     font-weight: bold;
     cursor: pointer;
+    letter-spacing: 1px;
     transition: 0.3s;
 }
 
 .card button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 5px 18px rgba(255,106,0,0.35);
+    background: linear-gradient(90deg,#ff8a00,#ff4500);
+    box-shadow: 0 0 20px rgba(255,106,0,0.4);
 }
+
 .notice {
     margin-top: 25px;
-    background: #151515;
-    border: 1px solid #333;
+    background: #17110d;
+    border-left: 4px solid #ff6a00;
+    border-top: 1px solid #333;
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
     padding: 16px;
     border-radius: 8px;
     color: #aaa;
@@ -180,21 +291,79 @@ nav a {
     line-height: 1.6;
 }
 
-footer {
-    text-align: center;
-    padding: 25px;
-    border-top: 1px solid #222;
-    color: #777;
-    margin-top: 30px;
+#about {
+    background: linear-gradient(145deg,#17100b,#0b0b0b);
+    border: 1px solid #382012;
+    border-radius: 14px;
+    margin-top: 35px;
+    margin-bottom: 35px;
+    padding: 35px;
 }
 
-@media (max-width: 750px) {
+#about .section-subtitle {
+    max-width: 750px;
+}
+
+#registration .card {
+    max-width: 650px;
+    margin: auto;
+    border: 1px solid #69320f;
+    box-shadow: 0 0 25px rgba(255,106,0,0.08);
+}
+
+#registration label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: #ddd;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#registration input,
+#registration select {
+    width: 100%;
+    padding: 13px;
+    background: #252525;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 6px;
+    outline: none;
+    transition: 0.3s;
+}
+
+#registration input:focus,
+#registration select:focus {
+    border-color: #ff6a00;
+    box-shadow: 0 0 12px rgba(255,106,0,0.2);
+}
+
+#registration option {
+    background: #252525;
+    color: white;
+}
+
+#demoMessage {
+    margin-top: 18px;
+    color: #ff9a52;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    background: #080808;
+    border-top: 1px solid #71320e;
+    padding: 35px 20px;
+    color: #777;
+    margin-top: 30px;
+    letter-spacing: 0.5px;
+}
+
+@media(max-width:750px) {
     .tournament-grid {
         grid-template-columns: 1fr;
-    }
-
-    .hero h1 {
-        font-size: 30px;
+        gap: 22px;
     }
 
     header {
@@ -204,6 +373,49 @@ footer {
 
     nav a {
         margin: 0 8px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+}
+
+@media(max-width:600px) {
+    .logo {
+        font-size: 22px;
+    }
+
+    .hero {
+        min-height: 480px;
+        padding: 45px 16px;
+    }
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+    .hero-tag {
+        letter-spacing: 1px;
+        font-size: 10px;
+    }
+
+    .hero h1 {
+        letter-spacing: 1px;
+    }
+
+    .hero button {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    #about {
+        padding: 22px;
+        margin-left: 15px;
+        margin-right: 15px;
     }
 }
 </style>
@@ -217,17 +429,17 @@ footer {
     <nav>
         <a href="#home">Home</a>
         <a href="#tournaments">Tournaments</a>
+        <a href="#registration">Register</a>
         <a href="#about">About</a>
     </nav>
 </header>
 
 <section class="hero" id="home">
     <div class="hero-content">
+
         <p class="hero-tag">🔥 THE ULTIMATE GAMING ZONE</p>
 
-        <h1>
-            BATTLEZONE <span>FF</span>
-        </h1>
+        <h1>BATTLEZONE <span>FF</span></h1>
 
         <p class="hero-description">
             Enter the battlefield, explore Solo, Duo and Squad
@@ -238,9 +450,13 @@ footer {
             EXPLORE TOURNAMENTS →
         </button>
 
-        <p class="hero-note">⚡ DEMO PLATFORM • NO ACTIVE TOURNAMENTS</p>
+        <p class="hero-note">
+            ⚡ DEMO PLATFORM • NO ACTIVE TOURNAMENTS
+        </p>
+
     </div>
 </section>
+
 <section class="container" id="tournaments">
 
     <h2 class="section-title">Upcoming Tournaments</h2>
@@ -251,21 +467,19 @@ footer {
 
     <div class="tournament-grid">
 
-        <!-- SOLO -->
         <div class="card">
             <div class="card-banner">🎯</div>
 
             <div class="card-content">
                 <span class="tag">SOLO MODE</span>
-
                 <h3>Solo Championship</h3>
 
                 <div class="details">
                     <p>👤 Players: <strong>1 Player</strong></p>
                     <p>🗺️ Map: <strong>Bermuda</strong></p>
-<p>💰 Demo Entry: <strong>₹10</strong></p>
-<p>🏆 Reward Preview: <strong>₹299</strong></p>
-<p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
+                    <p>💰 Demo Entry: <strong>₹10</strong></p>
+                    <p>🏆 Reward Preview: <strong>₹299</strong></p>
+                    <p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
                     <p>📅 Date: <strong>Coming Soon</strong></p>
                 </div>
 
@@ -275,21 +489,19 @@ footer {
             </div>
         </div>
 
-        <!-- DUO -->
         <div class="card">
             <div class="card-banner">⚔️</div>
 
             <div class="card-content">
                 <span class="tag">DUO MODE</span>
-
                 <h3>Duo Clash</h3>
 
                 <div class="details">
                     <p>👥 Players: <strong>2 Players</strong></p>
-                   <p>🗺️ Map: <strong>Bermuda</strong></p>
-<p>💰 Demo Entry: <strong>₹30</strong></p>
-<p>🏆 Reward Preview: <strong>₹500</strong></p>
-<p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
+                    <p>🗺️ Map: <strong>Bermuda</strong></p>
+                    <p>💰 Demo Entry: <strong>₹30</strong></p>
+                    <p>🏆 Reward Preview: <strong>₹500</strong></p>
+                    <p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
                     <p>📅 Date: <strong>Coming Soon</strong></p>
                 </div>
 
@@ -299,21 +511,19 @@ footer {
             </div>
         </div>
 
-        <!-- SQUAD -->
         <div class="card">
             <div class="card-banner">🏆</div>
 
             <div class="card-content">
                 <span class="tag">SQUAD MODE</span>
-
                 <h3>Squad Battle</h3>
 
                 <div class="details">
                     <p>👥 Players: <strong>4 Players</strong></p>
                     <p>🗺️ Map: <strong>Bermuda</strong></p>
-<p>💰 Demo Entry: <strong>₹80</strong></p>
-<p>🏆 Reward Preview: <strong>₹700</strong></p>
-<p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
+                    <p>💰 Demo Entry: <strong>₹80</strong></p>
+                    <p>🏆 Reward Preview: <strong>₹700</strong></p>
+                    <p style="color:#ff9900;">Demo only — no payment or cash prize.</p>
                     <p>📅 Date: <strong>Coming Soon</strong></p>
                 </div>
 
@@ -336,7 +546,83 @@ footer {
 
 </section>
 
+<section class="container" id="registration">
+
+    <h2 class="section-title">Player Registration</h2>
+
+    <p class="section-subtitle">
+        Try the demo registration with fictional test details.
+    </p>
+
+    <div class="card">
+        <div class="card-content">
+
+            <form id="demoForm">
+
+                <label for="playerName">Player Name</label>
+                <input
+                    type="text"
+                    id="playerName"
+                    placeholder="Enter demo player name"
+                    required
+                >
+
+                <label for="gameName">In-game Name</label>
+                <input
+                    type="text"
+                    id="gameName"
+                    placeholder="Enter demo game name"
+                    required
+                >
+
+                <label for="playerUID">Demo Player UID</label>
+                <input
+                    type="text"
+                    id="playerUID"
+                    placeholder="Enter fictional demo UID"
+                    required
+                >
+
+                <label for="gameMode">Game Mode</label>
+                <select id="gameMode" required>
+                    <option value="">Select Game Mode</option>
+                    <option value="Solo">Solo</option>
+                    <option value="Duo">Duo</option>
+                    <option value="Squad">Squad</option>
+                </select>
+
+                <div id="teamFields" style="display:none;">
+
+                    <label for="teamName">Team Name</label>
+                    <input
+                        type="text"
+                        id="teamName"
+                        placeholder="Enter demo team name"
+                    >
+
+                    <div id="teammateFields"></div>
+
+                </div>
+
+                <button type="submit">Submit Demo Registration</button>
+
+            </form>
+
+            <div id="demoMessage" role="status" aria-live="polite"></div>
+
+            <p class="details" style="margin-top:15px;">
+                DEMO ONLY: Use fictional names and UIDs.
+                This is a browser-only test, not a real tournament
+                registration or player information service.
+            </p>
+
+        </div>
+    </div>
+
+</section>
+
 <section class="container" id="about">
+
     <h2 class="section-title">About BattleZone FF</h2>
 
     <p class="section-subtitle">
@@ -345,6 +631,7 @@ footer {
         Our goal is to create a clean and easy platform
         where players can explore Solo, Duo and Squad modes.
     </p>
+
 </section>
 
 <footer>
@@ -352,6 +639,8 @@ footer {
 </footer>
 
 <script>
+
+// ===== NAVIGATION =====
 
 function goToTournaments() {
     document.getElementById("tournaments").scrollIntoView({
@@ -370,97 +659,28 @@ function showDetails(mode) {
         window.location.href = "squad.html";
     }
 }
-</script>
 
-<!-- REGISTRATION DEMO SECTION -->
 
-<section class="container" id="registration">
+// ===== REGISTRATION SYSTEM =====
 
-    <h2 class="section-title">Player Registration</h2>
-
-    <p class="section-subtitle">
-        Register for your preferred tournament mode.
-    </p>
-
-    <div class="card">
-        <div class="card-content">
-
-            <form id="demoForm">
-
-                <label for="playerName">Player Name</label>
-                <input
-                    type="text"
-                    id="playerName"
-                    placeholder="Enter your name"
-                    required
-                >
-
-                <label for="gameName">In-game Name</label>
-                <input
-                    type="text"
-                    id="gameName"
-                    placeholder="Enter your Free Fire name"
-                    required
-                >
-
-                <label for="playerUID">Free Fire UID</label>
-                <input
-                    type="text"
-                    id="playerUID"
-                    placeholder="Enter your Free Fire UID"
-                    required
-                >
-
-                <label for="gameMode">Game Mode</label>
-                <select id="gameMode" required>
-                    <option value="">Select Game Mode</option>
-                    <option value="Solo">Solo</option>
-                    <option value="Duo">Duo</option>
-                    <option value="Squad">Squad</option>
-                </select>
-
-                <div id="teamFields" style="display:none;">
-
-                    <label for="teamName">Team Name</label>
-                    <input
-                        type="text"
-                        id="teamName"
-                        placeholder="Enter team name"
-                    >
-
-                    <div id="teammateFields"></div>
-
-                </div>
-
-                <button type="submit">Submit Demo</button>
-
-            </form>
-
-            <div id="demoMessage"></div>
-
-            <p class="details" style="margin-top:15px;">
-                DEMO ONLY: This form does not save or send
-                player information. No real registration is active.
-            </p>
-
-        </div>
-    </div>
-
-</section>
-
-<script>
 const gameMode = document.getElementById("gameMode");
 const teamFields = document.getElementById("teamFields");
 const teammateFields = document.getElementById("teammateFields");
 const teamName = document.getElementById("teamName");
+const demoForm = document.getElementById("demoForm");
+const demoMessage = document.getElementById("demoMessage");
 
-gameMode.addEventListener("change", function () {
+
+// Generate teammate fields
+
+gameMode.addEventListener("change", function() {
 
     const mode = gameMode.value;
 
     teamFields.style.display = "none";
     teammateFields.innerHTML = "";
     teamName.required = false;
+    teamName.value = "";
 
     if (mode === "Duo" || mode === "Squad") {
 
@@ -471,494 +691,149 @@ gameMode.addEventListener("change", function () {
 
         for (let i = 1; i <= totalTeammates; i++) {
 
-            teammateFields.innerHTML += `
-                <h3 style="margin-top:20px;">
-                    Teammate ${i}
-                </h3>
+            const heading = document.createElement("h3");
+            heading.style.marginTop = "20px";
+            heading.textContent = "Teammate " + i;
 
-                <label>Teammate ${i} Name</label>
-                <input
-                    type="text"
-                    name="teammateName${i}"
-                    placeholder="Enter teammate name"
-                    required
-                >
+            const nameLabel = document.createElement("label");
+            nameLabel.textContent = "Teammate " + i + " Name";
 
-                <label>Teammate ${i} Free Fire UID</label>
-                <input
-                    type="text"
-                    name="teammateUID${i}"
-                    placeholder="Enter teammate UID"
-                    required
-                >
-            `;
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.name = "teammateName" + i;
+            nameInput.placeholder = "Enter fictional teammate name";
+            nameInput.required = true;
+
+            const uidLabel = document.createElement("label");
+            uidLabel.textContent = "Teammate " + i + " Demo UID";
+
+            const uidInput = document.createElement("input");
+            uidInput.type = "text";
+            uidInput.name = "teammateUID" + i;
+            uidInput.placeholder = "Enter fictional teammate UID";
+            uidInput.required = true;
+
+            teammateFields.appendChild(heading);
+            teammateFields.appendChild(nameLabel);
+            teammateFields.appendChild(nameInput);
+            teammateFields.appendChild(uidLabel);
+            teammateFields.appendChild(uidInput);
         }
     }
 });
 
-document.getElementById("demoForm").addEventListener("submit", function(e) {
+
+// Submit demo registration
+
+demoForm.addEventListener("submit", function(e) {
 
     e.preventDefault();
 
-    document.getElementById("demoMessage").innerHTML = `
-        <p style="color:#ff9800; margin-top:15px;">
-            Demo form submitted successfully!
-            No information has been saved or sent.
-        </p>
-    `;
+    const mode = gameMode.value;
+    const teammates = [];
+
+    const totalTeammates =
+        mode === "Duo" ? 1 :
+        mode === "Squad" ? 3 : 0;
+
+    for (let i = 1; i <= totalTeammates; i++) {
+
+        teammates.push({
+            name: this.elements["teammateName" + i].value.trim(),
+            uid: this.elements["teammateUID" + i].value.trim()
+        });
+    }
+
+    const registration = {
+
+        id: "BZ-" + Date.now(),
+
+        name: document.getElementById("playerName").value.trim(),
+
+        gameName: document.getElementById("gameName").value.trim(),
+
+        uid: document.getElementById("playerUID").value.trim(),
+
+        team: mode === "Solo"
+            ? "Solo Player"
+            : teamName.value.trim(),
+
+        mode: mode,
+
+        teammates: teammates,
+
+        status: "Pending",
+
+        submittedAt: new Date().toISOString()
+
+    };
+
+
+    // Read previous demo registrations
+
+    let savedRegistrations = [];
+
+    try {
+
+        savedRegistrations = JSON.parse(
+            localStorage.getItem("battlezoneDemoRegistrations") || "[]"
+        );
+
+        if (!Array.isArray(savedRegistrations)) {
+            savedRegistrations = [];
+        }
+
+    } catch (error) {
+
+        demoMessage.textContent =
+            "Unable to read demo storage. Please check your browser.";
+
+        return;
+    }
+
+
+    // Add new demo registration
+
+    savedRegistrations.push(registration);
+
+
+    // Save in browser
+
+    try {
+
+        localStorage.setItem(
+            "battlezoneDemoRegistrations",
+            JSON.stringify(savedRegistrations)
+        );
+
+    } catch (error) {
+
+        demoMessage.textContent =
+            "Demo storage failed. Please try another browser.";
+
+        return;
+    }
+
+
+    // Show success message
+
+    demoMessage.textContent =
+        "Demo registration saved successfully! Demo ID: " +
+        registration.id +
+        " | Status: Pending";
+
+
+    // Reset form
 
     this.reset();
+
     teamFields.style.display = "none";
     teammateFields.innerHTML = "";
     teamName.required = false;
+
 });
+
 </script>
-
-<style>
-#registration label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 8px;
-    color: #ddd;
-}
-
-#registration input,
-#registration select {
-    width: 100%;
-    padding: 13px;
-    background: #252525;
-    color: white;
-    border: 1px solid #444;
-    border-radius: 6px;
-    outline: none;
-}
-
-#registration input:focus,
-#registration select:focus {
-    border-color: #ff6a00;
-}
-
-#demoMessage {
-    margin-top: 18px;
-    color: #ff9a52;
-    font-weight: bold;
-}
-    .hero {
-    min-height: 520px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 60px 20px;
-    background:
-        radial-gradient(circle at center, #3b1608 0%, #100b09 45%, #050505 100%);
-    border-bottom: 2px solid #ff5a00;
-}
-
-.hero-content {
-    max-width: 850px;
-}
-
-.hero-tag {
-    color: #ff6a00;
-    font-weight: bold;
-    letter-spacing: 3px;
-}
-
-.hero h1 {
-    font-size: clamp(38px, 7vw, 76px);
-    font-weight: 900;
-    color: white;
-    margin: 20px 0;
-    letter-spacing: 2px;
-}
-
-.hero h1 span {
-    color: #ff5a00;
-}
-
-.hero-description {
-    color: #cccccc;
-    font-size: 18px;
-    line-height: 1.7;
-    max-width: 650px;
-    margin: 0 auto 28px;
-}
-
-.hero button {
-    background: #ff5a00;
-    color: white;
-    border: none;
-    padding: 16px 30px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.3s;
-}
-
-.hero button:hover {
-    background: #ff7b28;
-    transform: translateY(-3px);
-}
-
-.hero-note {
-    color: #999;
-    font-size: 12px;
-    margin-top: 22px;
-}
-
-@media (max-width: 600px) {
-    .hero {
-        min-height: 430px;
-        padding: 45px 16px;
-    }
-
-    .hero-description {
-        font-size: 15px;
-    }
-}
-</style>
-
-<script>
-document.getElementById("demoForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const name = document.getElementById("playerName").value;
-    const mode = document.getElementById("gameMode").value;
-
-    document.getElementById("demoMessage").textContent =
-        "Demo preview successful! Welcome, " + name +
-        ". Selected mode: " + mode +
-        ". No registration has been saved.";
-
-    document.getElementById("demoForm").reset();
-});
-</script>
-<style>
-/* ===== BATTLEZONE GAMING HEADER ===== */
-
-header {
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 106, 0, 0.4);
-    box-shadow: 0 4px 25px rgba(255, 106, 0, 0.08);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.logo {
-    font-size: 26px;
-    letter-spacing: 2px;
-    text-shadow: 0 0 12px rgba(255, 106, 0, 0.2);
-}
-
-nav a {
-    transition: 0.3s;
-}
-
-nav a:hover {
-    color: #ff6a00;
-}
-
-/* ===== HERO SECTION ===== */
-
-.hero {
-    position: relative;
-    overflow: hidden;
-    background:
-        radial-gradient(
-            ellipse at 50% 50%,
-            rgba(255, 85, 0, 0.18),
-            transparent 65%
-        ),
-        linear-gradient(180deg, #140a05, #080808 85%);
-    border-bottom: 1px solid rgba(255, 106, 0, 0.5);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1 {
-    text-shadow: 0 0 25px rgba(255, 106, 0, 0.15);
-}
-
-.hero-tag {
-    display: inline-block;
-    padding: 10px 16px;
-    border: 1px solid rgba(255, 106, 0, 0.35);
-    border-radius: 30px;
-    background: rgba(255, 106, 0, 0.08);
-    font-size: 12px;
-}
-
-/* ===== GAMING BUTTON ===== */
-
-.hero button {
-    box-shadow: 0 0 20px rgba(255, 90, 0, 0.2);
-}
-
-.hero button:hover {
-    box-shadow: 0 0 30px rgba(255, 90, 0, 0.5);
-    transform: translateY(-3px) scale(1.03);
-}
-
-/* ===== ANIMATION ===== */
-
-.hero-content {
-    animation: heroEnter 0.8s ease-out;
-}
-
-@keyframes heroEnter {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width: 600px) {
-    .logo {
-        font-size: 22px;
-    }
-
-    .hero h1 {
-        letter-spacing: 1px;
-    }
-
-    .hero-tag {
-        letter-spacing: 1px;
-        font-size: 10px;
-    }
-
-    .hero button {
-        width: 100%;
-        max-width: 320px;
-    }
-}
-</style>
-    <style>
-/* PREMIUM HERO EFFECT */
-
-.hero {
-    min-height: 580px;
-    position: relative;
-    isolation: isolate;
-}
-
-.hero::before {
-    content: "";
-    position: absolute;
-    width: 350px;
-    height: 350px;
-    background: #ff5a00;
-    filter: blur(150px);
-    opacity: 0.18;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: -1;
-}
-
-.hero h1 {
-    animation: titleGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlow {
-    from {
-        text-shadow: 0 0 10px rgba(255, 90, 0, 0.15);
-    }
-    to {
-        text-shadow: 0 0 28px rgba(255, 90, 0, 0.4);
-    }
-}
-
-.hero-description {
-    letter-spacing: 0.4px;
-}
-
-.hero-note {
-    letter-spacing: 2px;
-    opacity: 0.8;
-}
-
-@media (max-width: 600px) {
-    .hero {
-        min-height: 480px;
-    }
-}
-</style>
-    
-<style>
-/* ===== PREMIUM TOURNAMENT CARDS ===== */
-
-.tournament-grid {
-    gap: 28px;
-}
-
-.card {
-    position: relative;
-    background: linear-gradient(145deg, #1c1714, #090909);
-    border: 1px solid #493020;
-    border-radius: 16px;
-    transition: transform 0.35s ease,
-                border-color 0.35s ease,
-                box-shadow 0.35s ease;
-}
-
-.card:hover {
-    transform: translateY(-12px);
-    border-color: #ff6a00;
-    box-shadow: 0 12px 35px rgba(255, 106, 0, 0.25);
-}
-
-.card-banner {
-    height: 165px;
-    background:
-        radial-gradient(circle, #592408, #1a0c05 70%);
-    border-bottom: 1px solid #63300f;
-    font-size: 65px;
-    transition: 0.3s;
-}
-
-.card:hover .card-banner {
-    text-shadow: 0 0 25px #ff6a00;
-}
-
-.card-content {
-    padding: 25px;
-}
-
-.tag {
-    display: inline-block;
-    border: 1px solid #a94a13;
-    background: rgba(255, 106, 0, 0.12);
-    letter-spacing: 1px;
-}
-
-.card h3 {
-    font-size: 23px;
-    letter-spacing: 0.5px;
-}
-
-.details {
-    line-height: 2.4;
-}
-
-.card button {
-    border-radius: 8px;
-    letter-spacing: 1px;
-}
-
-.card button:hover {
-    background: linear-gradient(90deg, #ff8a00, #ff4500);
-    box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
-}
-
-@media (max-width: 750px) {
-    .tournament-grid {
-        grid-template-columns: 1fr;
-        gap: 22px;
-    }
-
-    .card-content {
-        padding: 20px;
-    }
-}
-</style>
-
-<style>
-/* SECTION HEADINGS */
-.section-title {
-    font-size: 30px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    border-left: 4px solid #ff6a00;
-    padding-left: 14px;
-    margin-bottom: 12px;
-}
-
-.section-subtitle {
-    color: #aaa;
-    line-height: 1.8;
-}
-
-/* ABOUT SECTION */
-#about {
-    background: linear-gradient(145deg, #17100b, #0b0b0b);
-    border: 1px solid #382012;
-    border-radius: 14px;
-    margin-top: 35px;
-    margin-bottom: 35px;
-    padding: 35px;
-}
-
-#about .section-title {
-    color: #fff;
-}
-
-#about .section-subtitle {
-    max-width: 750px;
-}
-
-/* REGISTRATION SECTION */
-#registration .card {
-    max-width: 650px;
-    margin: auto;
-    border: 1px solid #69320f;
-    box-shadow: 0 0 25px rgba(255,106,0,0.08);
-}
-
-#registration label {
-    font-weight: bold;
-    font-size: 14px;
-}
-
-#registration input,
-#registration select {
-    transition: 0.3s;
-}
-
-#registration input:focus,
-#registration select:focus {
-    box-shadow: 0 0 12px rgba(255,106,0,0.2);
-}
-
-/* NOTICE */
-.notice {
-    border-left: 4px solid #ff6a00;
-    background: #17110d;
-}
-
-/* FOOTER */
-footer {
-    background: #080808;
-    border-top: 1px solid #71320e;
-    padding: 35px 20px;
-    letter-spacing: 0.5px;
-}
-
-/* MOBILE */
-@media(max-width:600px) {
-    .section-title {
-        font-size: 24px;
-    }
-
-    #about {
-        padding: 22px;
-        margin-left: 15px;
-        margin-right: 15px;
-    }
-}
-</style>
 
 </body>
 </html>
-
