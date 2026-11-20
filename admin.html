@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>BattleZone FF - Admin Dashboard</title>
 
 <style>
@@ -32,6 +31,11 @@ header {
     padding: 22px;
     border-radius: 12px;
     margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 header h1 {
@@ -39,7 +43,7 @@ header h1 {
     margin-bottom: 8px;
 }
 
-header p {
+header p, .note {
     color: #aaa;
 }
 
@@ -50,7 +54,7 @@ header p {
     margin-bottom: 25px;
 }
 
-.stat-card {
+.stat-card, .panel {
     background: #171717;
     border: 1px solid #333;
     padding: 22px;
@@ -70,10 +74,6 @@ header p {
 }
 
 .panel {
-    background: #151515;
-    border: 1px solid #333;
-    padding: 20px;
-    border-radius: 12px;
     margin-bottom: 20px;
 }
 
@@ -150,11 +150,20 @@ th {
 
 button {
     border: none;
-    padding: 9px 12px;
+    padding: 10px 13px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
     margin: 3px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.login-btn, .logout-btn, .close-btn {
+    background: #ff6500;
+    color: white;
 }
 
 .view-btn {
@@ -172,16 +181,6 @@ button {
     color: white;
 }
 
-button:hover {
-    opacity: 0.8;
-}
-
-.note {
-    color: #aaa;
-    font-size: 13px;
-    margin-top: 15px;
-}
-
 .back {
     display: inline-block;
     margin: 15px 0;
@@ -189,7 +188,50 @@ button:hover {
     text-decoration: none;
 }
 
-/* Details popup */
+.note {
+    font-size: 13px;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+/* Login Screen */
+
+#loginScreen {
+    max-width: 420px;
+    margin: 70px auto;
+    background: #151515;
+    border: 1px solid #ff6500;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#loginScreen h1 {
+    color: #ff6500;
+    margin-bottom: 12px;
+}
+
+#loginScreen p {
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+#loginScreen input {
+    width: 100%;
+    margin: 9px 0;
+}
+
+#loginScreen button {
+    width: 100%;
+    margin-top: 12px;
+}
+
+#loginError {
+    color: #ff7777 !important;
+    margin-top: 15px;
+}
+
+/* Details Popup */
 
 .modal {
     display: none;
@@ -222,10 +264,12 @@ button:hover {
 }
 
 .close-btn {
-    background: #ff6500;
-    color: white;
     width: 100%;
     margin-top: 15px;
+}
+
+#dashboard {
+    display: none;
 }
 
 @media(max-width:600px) {
@@ -233,8 +277,13 @@ button:hover {
         padding: 10px;
     }
 
-    .panel {
-        padding: 12px;
+    .panel, .stat-card {
+        padding: 14px;
+    }
+
+    #loginScreen {
+        margin: 35px auto;
+        padding: 22px;
     }
 
     .modal-content {
@@ -246,14 +295,65 @@ button:hover {
 
 <body>
 
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+    <h1>🔥 BattleZone FF</h1>
+    <p>Admin Login</p>
+
+    <form id="loginForm">
+
+        <input
+            type="text"
+            id="adminUsername"
+            placeholder="Admin Username"
+            autocomplete="username"
+            required
+        >
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Admin Password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit" class="login-btn">
+            Login to Dashboard
+        </button>
+
+    </form>
+
+    <p id="loginError"></p>
+
+    <p class="note">
+        Demo login only. Do not use real passwords here.
+    </p>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
 <div class="container">
 
 <header>
-    <h1>🔥 BattleZone FF</h1>
-    <p>Admin Dashboard - Demo Version</p>
+
+    <div>
+        <h1>🔥 BattleZone FF</h1>
+        <p>Admin Dashboard - Demo Version</p>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">
+        Logout
+    </button>
+
 </header>
 
-<!-- Statistics -->
+<!-- STATISTICS -->
 
 <div class="stats">
 
@@ -289,7 +389,7 @@ button:hover {
 
 </div>
 
-<!-- Registration Management -->
+<!-- REGISTRATION MANAGEMENT -->
 
 <div class="panel">
 
@@ -340,9 +440,9 @@ button:hover {
     </div>
 
     <p class="note">
-        DEMO ONLY: These are fictional sample registrations.
-        Changes are stored only in this browser session.
-        No real player information is stored or transmitted.
+        DEMO ONLY: All registrations are fictional.
+        Changes remain only in this browser session.
+        No real player information is collected or transmitted.
     </p>
 
 </div>
@@ -350,8 +450,9 @@ button:hover {
 <a class="back" href="index.html">← Back to Homepage</a>
 
 </div>
+</div>
 
-<!-- View Details Popup -->
+<!-- DETAILS POPUP -->
 
 <div class="modal" id="detailsModal">
 
@@ -371,7 +472,59 @@ button:hover {
 
 <script>
 
-// Fictional sample registrations only
+// DEMO LOGIN ONLY
+// This is not real authentication.
+
+const DEMO_USERNAME = "admin";
+const DEMO_PASSWORD = "BattleZone123";
+
+const loginScreen = document.getElementById("loginScreen");
+const dashboard = document.getElementById("dashboard");
+
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById("adminUsername").value;
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+    if (
+        username === DEMO_USERNAME &&
+        password === DEMO_PASSWORD
+    ) {
+        loginScreen.style.display = "none";
+        dashboard.style.display = "block";
+
+        document.getElementById("loginError").textContent = "";
+
+        updateDashboard();
+        displayRegistrations();
+
+    } else {
+
+        document.getElementById("loginError").textContent =
+            "Incorrect username or password!";
+
+    }
+
+});
+
+function logout() {
+
+    dashboard.style.display = "none";
+    loginScreen.style.display = "block";
+
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("loginError").textContent = "";
+
+    closeDetails();
+
+}
+
+// FICTIONAL SAMPLE REGISTRATIONS
 
 const registrations = [
     {
@@ -426,7 +579,7 @@ const registrations = [
     }
 ];
 
-// Update dashboard statistics
+// UPDATE STATISTICS
 
 function updateDashboard() {
 
@@ -450,7 +603,7 @@ function updateDashboard() {
 
 }
 
-// Display registration list
+// DISPLAY REGISTRATIONS
 
 function displayRegistrations() {
 
@@ -543,7 +696,7 @@ function displayRegistrations() {
 
 }
 
-// View registration details
+// VIEW DETAILS
 
 function viewDetails(id) {
 
@@ -551,38 +704,40 @@ function viewDetails(id) {
 
     if (!r) return;
 
-    let teammateHTML = "";
+    const content = document.getElementById("detailsContent");
+    content.replaceChildren();
+
+    function addDetail(label, value) {
+        const p = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = label + ": ";
+        p.appendChild(strong);
+        p.appendChild(document.createTextNode(value));
+        content.appendChild(p);
+    }
+
+    addDetail("Player Name", r.name);
+    addDetail("In-game Name", r.gameName);
+    addDetail("Free Fire UID", r.uid);
+    addDetail("Game Mode", r.mode);
+    addDetail("Team Name", r.team);
 
     r.teammates.forEach((mate, index) => {
-
-        teammateHTML += `
-            <p>Teammate ${index + 1}: ${mate.name}</p>
-            <p>UID: ${mate.uid}</p>
-        `;
-
+        addDetail("Teammate " + (index + 1), mate.name);
+        addDetail("UID", mate.uid);
     });
 
-    document.getElementById("detailsContent").innerHTML = `
-        <p><strong>Player Name:</strong> ${r.name}</p>
-        <p><strong>In-game Name:</strong> ${r.gameName}</p>
-        <p><strong>Free Fire UID:</strong> ${r.uid}</p>
-        <p><strong>Game Mode:</strong> ${r.mode}</p>
-        <p><strong>Team Name:</strong> ${r.team}</p>
-        ${teammateHTML}
-        <p><strong>Status:</strong> ${r.status}</p>
-    `;
+    addDetail("Status", r.status);
 
     document.getElementById("detailsModal").style.display = "flex";
 
 }
 
 function closeDetails() {
-
     document.getElementById("detailsModal").style.display = "none";
-
 }
 
-// Approve or reject registration
+// APPROVE / REJECT
 
 function changeStatus(id, newStatus) {
 
@@ -597,7 +752,7 @@ function changeStatus(id, newStatus) {
 
 }
 
-// Filters and search
+// SEARCH AND FILTERS
 
 document.getElementById("modeFilter")
     .addEventListener("change", displayRegistrations);
@@ -607,11 +762,6 @@ document.getElementById("statusFilter")
 
 document.getElementById("searchInput")
     .addEventListener("input", displayRegistrations);
-
-// Initial display
-
-updateDashboard();
-displayRegistrations();
 
 </script>
 
