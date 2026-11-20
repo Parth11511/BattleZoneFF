@@ -7,401 +7,100 @@
 <title>BattleZone FF - Admin Dashboard</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #080808;
-    color: white;
-    font-family: Arial, sans-serif;
-    padding: 20px;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-header {
-    background: #151515;
-    border: 1px solid #ff6500;
-    padding: 22px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-header h1 {
-    color: #ff6500;
-    margin-bottom: 8px;
-}
-
-header p, .note {
-    color: #aaa;
-}
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.stat-card, .panel {
-    background: #171717;
-    border: 1px solid #333;
-    padding: 22px;
-    border-radius: 12px;
-}
-
-.stat-card h3 {
-    color: #aaa;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-.stat-card p {
-    color: #ff6500;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.panel {
-    margin-bottom: 20px;
-}
-
-.panel h2 {
-    color: #ff6500;
-    margin-bottom: 18px;
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-input, select {
-    background: #222;
-    color: white;
-    padding: 12px;
-    border: 1px solid #444;
-    border-radius: 7px;
-}
-
-input {
-    flex: 1;
-    min-width: 180px;
-}
-
-select {
-    border-color: #ff6500;
-}
-
-.table-wrap {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 850px;
-}
-
-th, td {
-    padding: 14px;
-    border-bottom: 1px solid #333;
-    text-align: left;
-}
-
-th {
-    color: #ff6500;
-}
-
-.status {
-    display: inline-block;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-}
-
-.Pending {
-    background: #493600;
-    color: #ffc107;
-}
-
-.Approved {
-    background: #123d22;
-    color: #4ade80;
-}
-
-.Rejected {
-    background: #4a1717;
-    color: #ff7777;
-}
-
-button {
-    border: none;
-    padding: 10px 13px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    margin: 3px;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
-.login-btn, .logout-btn, .close-btn {
-    background: #ff6500;
-    color: white;
-}
-
-.view-btn {
-    background: #333;
-    color: white;
-}
-
-.approve-btn {
-    background: #16833b;
-    color: white;
-}
-
-.reject-btn {
-    background: #b52b2b;
-    color: white;
-}
-
-.back {
-    display: inline-block;
-    margin: 15px 0;
-    color: #ff6500;
-    text-decoration: none;
-}
-
-.note {
-    font-size: 13px;
-    margin-top: 15px;
-    line-height: 1.5;
-}
-
-/* Login Screen */
-
-#loginScreen {
-    max-width: 420px;
-    margin: 70px auto;
-    background: #151515;
-    border: 1px solid #ff6500;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-}
-
-#loginScreen h1 {
-    color: #ff6500;
-    margin-bottom: 12px;
-}
-
-#loginScreen p {
-    color: #aaa;
-    margin-bottom: 15px;
-}
-
-#loginScreen input {
-    width: 100%;
-    margin: 9px 0;
-}
-
-#loginScreen button {
-    width: 100%;
-    margin-top: 12px;
-}
-
-#loginError {
-    color: #ff7777 !important;
-    margin-top: 15px;
-}
-
-/* Details Popup */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-    z-index: 10;
-}
-
-.modal-content {
-    background: #191919;
-    border: 1px solid #ff6500;
-    padding: 25px;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 450px;
-}
-
-.modal-content h2 {
-    color: #ff6500;
-    margin-bottom: 20px;
-}
-
-.modal-content p {
-    margin: 12px 0;
-    color: #ddd;
-}
-
-.close-btn {
-    width: 100%;
-    margin-top: 15px;
-}
-
-#dashboard {
-    display: none;
-}
-
-@media(max-width:600px) {
-    body {
-        padding: 10px;
-    }
-
-    .panel, .stat-card {
-        padding: 14px;
-    }
-
-    #loginScreen {
-        margin: 35px auto;
-        padding: 22px;
-    }
-
-    .modal-content {
-        padding: 18px;
-    }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#080808;color:white;font-family:Arial,sans-serif;padding:20px}
+.container{max-width:1200px;margin:auto}
+header{background:#151515;border:1px solid #ff6500;padding:22px;border-radius:12px;margin-bottom:25px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+header h1{color:#ff6500;margin-bottom:8px}
+header p,.note{color:#aaa}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:25px}
+.stat-card,.panel{background:#171717;border:1px solid #333;padding:22px;border-radius:12px}
+.stat-card h3{color:#aaa;font-size:14px;margin-bottom:12px}
+.stat-card p{color:#ff6500;font-size:28px;font-weight:bold}
+.panel{margin-bottom:20px}
+.panel h2{color:#ff6500;margin-bottom:18px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+input,select{background:#222;color:white;padding:12px;border:1px solid #444;border-radius:7px}
+input{flex:1;min-width:180px}
+select{border-color:#ff6500}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:14px;border-bottom:1px solid #333;text-align:left}
+th{color:#ff6500}
+.status{display:inline-block;padding:7px 10px;border-radius:5px;font-size:12px}
+.Pending{background:#493600;color:#ffc107}
+.Approved{background:#123d22;color:#4ade80}
+.Rejected{background:#4a1717;color:#ff7777}
+button{border:none;padding:10px 13px;border-radius:6px;cursor:pointer;font-weight:bold;margin:3px}
+button:hover{opacity:.8}
+.login-btn,.logout-btn,.close-btn{background:#ff6500;color:white}
+.view-btn{background:#333;color:white}
+.approve-btn{background:#16833b;color:white}
+.reject-btn{background:#b52b2b;color:white}
+.back{display:inline-block;margin:15px 0;color:#ff6500;text-decoration:none}
+.note{font-size:13px;margin-top:15px;line-height:1.5}
+#loginScreen{max-width:420px;margin:70px auto;background:#151515;border:1px solid #ff6500;padding:30px;border-radius:12px;text-align:center}
+#loginScreen h1{color:#ff6500;margin-bottom:12px}
+#loginScreen p{color:#aaa;margin-bottom:15px}
+#loginScreen input{width:100%;margin:9px 0}
+#loginScreen button{width:100%;margin-top:12px}
+#loginError{color:#ff7777!important;margin-top:15px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);justify-content:center;align-items:center;padding:15px;z-index:10}
+.modal-content{background:#191919;border:1px solid #ff6500;padding:25px;border-radius:12px;width:100%;max-width:450px;max-height:85vh;overflow-y:auto}
+.modal-content h2{color:#ff6500;margin-bottom:20px}
+.modal-content p{margin:12px 0;color:#ddd}
+.close-btn{width:100%;margin-top:15px}
+#dashboard{display:none}
+@media(max-width:600px){
+body{padding:10px}
+.panel,.stat-card{padding:14px}
+#loginScreen{margin:35px auto;padding:22px}
+.modal-content{padding:18px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-
 <div id="loginScreen">
-
     <h1>🔥 BattleZone FF</h1>
     <p>Admin Login</p>
 
     <form id="loginForm">
-
-        <input
-            type="text"
-            id="adminUsername"
-            placeholder="Admin Username"
-            autocomplete="username"
-            required
-        >
-
-        <input
-            type="password"
-            id="adminPassword"
-            placeholder="Admin Password"
-            autocomplete="current-password"
-            required
-        >
-
-        <button type="submit" class="login-btn">
-            Login to Dashboard
-        </button>
-
+        <input type="text" id="adminUsername" placeholder="Admin Username" autocomplete="username" required>
+        <input type="password" id="adminPassword" placeholder="Admin Password" autocomplete="current-password" required>
+        <button type="submit" class="login-btn">Login to Dashboard</button>
     </form>
 
     <p id="loginError"></p>
-
-    <p class="note">
-        Demo login only. Do not use real passwords here.
-    </p>
-
+    <p class="note">Demo login only. Do not use real passwords here.</p>
 </div>
 
-<!-- DASHBOARD -->
-
 <div id="dashboard">
-
 <div class="container">
 
 <header>
-
     <div>
         <h1>🔥 BattleZone FF</h1>
         <p>Admin Dashboard - Demo Version</p>
     </div>
-
-    <button class="logout-btn" onclick="logout()">
-        Logout
-    </button>
-
+    <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
-<!-- STATISTICS -->
-
 <div class="stats">
-
-    <div class="stat-card">
-        <h3>Total Registrations</h3>
-        <p id="totalCount">0</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Solo</h3>
-        <p id="soloCount">0</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Duo</h3>
-        <p id="duoCount">0</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Squad</h3>
-        <p id="squadCount">0</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Approved</h3>
-        <p id="approvedCount">0</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Pending</h3>
-        <p id="pendingCount">0</p>
-    </div>
-
+    <div class="stat-card"><h3>Total Registrations</h3><p id="totalCount">0</p></div>
+    <div class="stat-card"><h3>Solo</h3><p id="soloCount">0</p></div>
+    <div class="stat-card"><h3>Duo</h3><p id="duoCount">0</p></div>
+    <div class="stat-card"><h3>Squad</h3><p id="squadCount">0</p></div>
+    <div class="stat-card"><h3>Approved</h3><p id="approvedCount">0</p></div>
+    <div class="stat-card"><h3>Pending</h3><p id="pendingCount">0</p></div>
 </div>
 
-<!-- REGISTRATION MANAGEMENT -->
-
 <div class="panel">
-
     <h2>Registration Management</h2>
 
     <div class="controls">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search player or team..."
-        >
+        <input type="text" id="searchInput" placeholder="Search player or team...">
 
         <select id="modeFilter">
             <option value="All">All Modes</option>
@@ -416,13 +115,10 @@ button:hover {
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
         </select>
-
     </div>
 
     <div class="table-wrap">
-
         <table>
-
             <thead>
                 <tr>
                     <th>ID</th>
@@ -432,19 +128,15 @@ button:hover {
                     <th>Actions</th>
                 </tr>
             </thead>
-
             <tbody id="registrationList"></tbody>
-
         </table>
-
     </div>
 
     <p class="note">
-        DEMO ONLY: All registrations are fictional.
-        Changes remain only in this browser session.
-        No real player information is collected or transmitted.
+        DEMO ONLY: Use fictional test information.
+        Registrations and status changes are stored only in this browser.
+        This is not a secure server or real tournament system.
     </p>
-
 </div>
 
 <a class="back" href="index.html">← Back to Homepage</a>
@@ -452,81 +144,27 @@ button:hover {
 </div>
 </div>
 
-<!-- DETAILS POPUP -->
-
 <div class="modal" id="detailsModal">
-
     <div class="modal-content">
-
         <h2>Registration Details</h2>
-
         <div id="detailsContent"></div>
-
-        <button class="close-btn" onclick="closeDetails()">
-            Close
-        </button>
-
+        <button class="close-btn" onclick="closeDetails()">Close</button>
     </div>
-
 </div>
 
 <script>
 
-// DEMO LOGIN ONLY
-// This is not real authentication.
-
+// DEMO LOGIN ONLY - NOT SECURE AUTHENTICATION
 const DEMO_USERNAME = "admin";
 const DEMO_PASSWORD = "BattleZone123";
+
+const STORAGE_KEY = "battlezoneDemoRegistrations";
 
 const loginScreen = document.getElementById("loginScreen");
 const dashboard = document.getElementById("dashboard");
 
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-
-    e.preventDefault();
-
-    const username =
-        document.getElementById("adminUsername").value;
-
-    const password =
-        document.getElementById("adminPassword").value;
-
-    if (
-        username === DEMO_USERNAME &&
-        password === DEMO_PASSWORD
-    ) {
-        loginScreen.style.display = "none";
-        dashboard.style.display = "block";
-
-        document.getElementById("loginError").textContent = "";
-
-        updateDashboard();
-        displayRegistrations();
-
-    } else {
-
-        document.getElementById("loginError").textContent =
-            "Incorrect username or password!";
-
-    }
-
-});
-
-function logout() {
-
-    dashboard.style.display = "none";
-    loginScreen.style.display = "block";
-
-    document.getElementById("adminPassword").value = "";
-    document.getElementById("loginError").textContent = "";
-
-    closeDetails();
-
-}
-
 // FICTIONAL SAMPLE REGISTRATIONS
-
-const registrations = [
+const sampleRegistrations = [
     {
         id: 1,
         name: "Player Alpha",
@@ -544,9 +182,7 @@ const registrations = [
         uid: "DEMO1002",
         team: "Team Bravo",
         mode: "Duo",
-        teammates: [
-            {name: "Demo Mate 1", uid: "DEMO2001"}
-        ],
+        teammates: [{name:"Demo Mate 1",uid:"DEMO2001"}],
         status: "Approved"
     },
     {
@@ -557,9 +193,9 @@ const registrations = [
         team: "Team Charlie",
         mode: "Squad",
         teammates: [
-            {name: "Demo Mate 1", uid: "DEMO3001"},
-            {name: "Demo Mate 2", uid: "DEMO3002"},
-            {name: "Demo Mate 3", uid: "DEMO3003"}
+            {name:"Demo Mate 1",uid:"DEMO3001"},
+            {name:"Demo Mate 2",uid:"DEMO3002"},
+            {name:"Demo Mate 3",uid:"DEMO3003"}
         ],
         status: "Pending"
     },
@@ -571,74 +207,116 @@ const registrations = [
         team: "Team Delta",
         mode: "Squad",
         teammates: [
-            {name: "Demo Mate 1", uid: "DEMO4001"},
-            {name: "Demo Mate 2", uid: "DEMO4002"},
-            {name: "Demo Mate 3", uid: "DEMO4003"}
+            {name:"Demo Mate 1",uid:"DEMO4001"},
+            {name:"Demo Mate 2",uid:"DEMO4002"},
+            {name:"Demo Mate 3",uid:"DEMO4003"}
         ],
         status: "Rejected"
     }
 ];
 
+// READ HOMEPAGE REGISTRATIONS
+function getSavedRegistrations() {
+    try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        console.error("Registration data could not be read:", error);
+        return [];
+    }
+}
+
+// NORMALIZE REGISTRATION FIELDS
+function normalizeRegistration(r) {
+    const teammates = Array.isArray(r.teammates) ? r.teammates : [];
+
+    return {
+        ...r,
+        id: r.id ?? ("demo-" + Date.now() + "-" + Math.random()),
+        name: r.name || r.playerName || r.fullName || "Demo Player",
+        gameName: r.gameName || r.game_name || "Not provided",
+        uid: r.uid || r.gameUID || r.freeFireUID || "Not provided",
+        team: r.team || r.teamName || r.gameName || r.name || "Demo Team",
+        mode: ["Solo","Duo","Squad"].includes(r.mode) ? r.mode : "Solo",
+        teammates: teammates,
+        status: ["Pending","Approved","Rejected"].includes(r.status) ? r.status : "Pending"
+    };
+}
+
+// COMBINE SAMPLE + HOMEPAGE REGISTRATIONS
+let registrations = [];
+
+function loadRegistrations() {
+    const saved = getSavedRegistrations().map(normalizeRegistration);
+    registrations = [...sampleRegistrations, ...saved];
+}
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById("adminUsername").value;
+    const password = document.getElementById("adminPassword").value;
+
+    if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+        loginScreen.style.display = "none";
+        dashboard.style.display = "block";
+
+        document.getElementById("loginError").textContent = "";
+
+        loadRegistrations();
+        updateDashboard();
+        displayRegistrations();
+    } else {
+        document.getElementById("loginError").textContent =
+            "Incorrect username or password!";
+    }
+});
+
+function logout() {
+    dashboard.style.display = "none";
+    loginScreen.style.display = "block";
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("loginError").textContent = "";
+    closeDetails();
+}
+
 // UPDATE STATISTICS
-
 function updateDashboard() {
-
-    document.getElementById("totalCount").textContent =
-        registrations.length;
-
+    document.getElementById("totalCount").textContent = registrations.length;
     document.getElementById("soloCount").textContent =
         registrations.filter(r => r.mode === "Solo").length;
-
     document.getElementById("duoCount").textContent =
         registrations.filter(r => r.mode === "Duo").length;
-
     document.getElementById("squadCount").textContent =
         registrations.filter(r => r.mode === "Squad").length;
-
     document.getElementById("approvedCount").textContent =
         registrations.filter(r => r.status === "Approved").length;
-
     document.getElementById("pendingCount").textContent =
         registrations.filter(r => r.status === "Pending").length;
-
 }
 
 // DISPLAY REGISTRATIONS
-
 function displayRegistrations() {
-
-    const mode =
-        document.getElementById("modeFilter").value;
-
-    const status =
-        document.getElementById("statusFilter").value;
-
-    const search =
-        document.getElementById("searchInput").value.toLowerCase();
+    const mode = document.getElementById("modeFilter").value;
+    const status = document.getElementById("statusFilter").value;
+    const search = document.getElementById("searchInput").value.toLowerCase();
 
     const filtered = registrations.filter(r => {
+        const matchesMode = mode === "All" || r.mode === mode;
+        const matchesStatus = status === "All" || r.status === status;
 
-        const matchesMode =
-            mode === "All" || r.mode === mode;
+        const searchText = [
+            r.name, r.gameName, r.uid, r.team, r.mode
+        ].join(" ").toLowerCase();
 
-        const matchesStatus =
-            status === "All" || r.status === status;
-
-        const matchesSearch =
-            r.name.toLowerCase().includes(search) ||
-            r.team.toLowerCase().includes(search);
-
-        return matchesMode && matchesStatus && matchesSearch;
-
+        return matchesMode && matchesStatus && searchText.includes(search);
     });
 
-    const list =
-        document.getElementById("registrationList");
-
-    list.innerHTML = "";
+    const list = document.getElementById("registrationList");
+    list.replaceChildren();
 
     filtered.forEach(r => {
-
         const tr = document.createElement("tr");
 
         const id = document.createElement("td");
@@ -651,12 +329,10 @@ function displayRegistrations() {
         modeCell.textContent = r.mode;
 
         const statusCell = document.createElement("td");
-
-        const statusBadge = document.createElement("span");
-        statusBadge.className = "status " + r.status;
-        statusBadge.textContent = r.status;
-
-        statusCell.appendChild(statusBadge);
+        const badge = document.createElement("span");
+        badge.className = "status " + r.status;
+        badge.textContent = r.status;
+        statusCell.appendChild(badge);
 
         const actions = document.createElement("td");
 
@@ -675,33 +351,24 @@ function displayRegistrations() {
         rejectButton.textContent = "Reject";
         rejectButton.addEventListener("click", () => changeStatus(r.id, "Rejected"));
 
-        actions.appendChild(viewButton);
-        actions.appendChild(approveButton);
-        actions.appendChild(rejectButton);
-
-        tr.appendChild(id);
-        tr.appendChild(team);
-        tr.appendChild(modeCell);
-        tr.appendChild(statusCell);
-        tr.appendChild(actions);
-
+        actions.append(viewButton, approveButton, rejectButton);
+        tr.append(id, team, modeCell, statusCell, actions);
         list.appendChild(tr);
-
     });
 
     if (filtered.length === 0) {
-        list.innerHTML =
-            '<tr><td colspan="5">No registrations found.</td></tr>';
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 5;
+        td.textContent = "No registrations found.";
+        tr.appendChild(td);
+        list.appendChild(tr);
     }
-
 }
 
 // VIEW DETAILS
-
 function viewDetails(id) {
-
-    const r = registrations.find(item => item.id === id);
-
+    const r = registrations.find(item => String(item.id) === String(id));
     if (!r) return;
 
     const content = document.getElementById("detailsContent");
@@ -711,8 +378,7 @@ function viewDetails(id) {
         const p = document.createElement("p");
         const strong = document.createElement("strong");
         strong.textContent = label + ": ";
-        p.appendChild(strong);
-        p.appendChild(document.createTextNode(value));
+        p.append(strong, document.createTextNode(String(value ?? "Not provided")));
         content.appendChild(p);
     }
 
@@ -723,37 +389,50 @@ function viewDetails(id) {
     addDetail("Team Name", r.team);
 
     r.teammates.forEach((mate, index) => {
-        addDetail("Teammate " + (index + 1), mate.name);
-        addDetail("UID", mate.uid);
+        if (typeof mate === "string") {
+            addDetail("Teammate " + (index + 1), mate);
+        } else {
+            addDetail("Teammate " + (index + 1), mate.name || "Not provided");
+            if (mate.uid) addDetail("Teammate UID", mate.uid);
+        }
     });
 
     addDetail("Status", r.status);
 
-    document.getElementById("detailsModal").style.display = "flex";
+    if (r.submittedAt) {
+        addDetail("Submitted At", r.submittedAt);
+    }
 
+    document.getElementById("detailsModal").style.display = "flex";
 }
 
 function closeDetails() {
     document.getElementById("detailsModal").style.display = "none";
 }
 
-// APPROVE / REJECT
-
+// SAVE STATUS CHANGES
 function changeStatus(id, newStatus) {
-
-    const r = registrations.find(item => item.id === id);
-
+    const r = registrations.find(item => String(item.id) === String(id));
     if (!r) return;
 
     r.status = newStatus;
 
+    // Save only homepage registrations.
+    const saved = getSavedRegistrations();
+    const updated = saved.map(item => {
+        if (String(item.id) === String(id)) {
+            return {...item, status:newStatus};
+        }
+        return item;
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
     updateDashboard();
     displayRegistrations();
-
 }
 
 // SEARCH AND FILTERS
-
 document.getElementById("modeFilter")
     .addEventListener("change", displayRegistrations);
 
@@ -763,7 +442,15 @@ document.getElementById("statusFilter")
 document.getElementById("searchInput")
     .addEventListener("input", displayRegistrations);
 
-</script>
+// Refresh registrations when another tab updates homepage data.
+window.addEventListener("storage", function(event) {
+    if (event.key === STORAGE_KEY && dashboard.style.display === "block") {
+        loadRegistrations();
+        updateDashboard();
+        displayRegistrations();
+    }
+});
 
+</script>
 </body>
 </html>
