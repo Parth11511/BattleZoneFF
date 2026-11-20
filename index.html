@@ -702,6 +702,85 @@ nav a:hover {
     }
 }
 </style>
+    
+<style>
+/* ===== PREMIUM TOURNAMENT CARDS ===== */
+
+.tournament-grid {
+    gap: 28px;
+}
+
+.card {
+    position: relative;
+    background: linear-gradient(145deg, #1c1714, #090909);
+    border: 1px solid #493020;
+    border-radius: 16px;
+    transition: transform 0.35s ease,
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+}
+
+.card:hover {
+    transform: translateY(-12px);
+    border-color: #ff6a00;
+    box-shadow: 0 12px 35px rgba(255, 106, 0, 0.25);
+}
+
+.card-banner {
+    height: 165px;
+    background:
+        radial-gradient(circle, #592408, #1a0c05 70%);
+    border-bottom: 1px solid #63300f;
+    font-size: 65px;
+    transition: 0.3s;
+}
+
+.card:hover .card-banner {
+    text-shadow: 0 0 25px #ff6a00;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.tag {
+    display: inline-block;
+    border: 1px solid #a94a13;
+    background: rgba(255, 106, 0, 0.12);
+    letter-spacing: 1px;
+}
+
+.card h3 {
+    font-size: 23px;
+    letter-spacing: 0.5px;
+}
+
+.details {
+    line-height: 2.4;
+}
+
+.card button {
+    border-radius: 8px;
+    letter-spacing: 1px;
+}
+
+.card button:hover {
+    background: linear-gradient(90deg, #ff8a00, #ff4500);
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+}
+
+@media (max-width: 750px) {
+    .tournament-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+}
+</style>
+
 </body>
 </html>
 
