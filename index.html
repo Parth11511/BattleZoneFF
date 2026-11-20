@@ -651,6 +651,57 @@ nav a:hover {
     }
 }
 </style>
+    <style>
+/* PREMIUM HERO EFFECT */
+
+.hero {
+    min-height: 580px;
+    position: relative;
+    isolation: isolate;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: #ff5a00;
+    filter: blur(150px);
+    opacity: 0.18;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.hero h1 {
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 90, 0, 0.15);
+    }
+    to {
+        text-shadow: 0 0 28px rgba(255, 90, 0, 0.4);
+    }
+}
+
+.hero-description {
+    letter-spacing: 0.4px;
+}
+
+.hero-note {
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        min-height: 480px;
+    }
+}
+</style>
 </body>
 </html>
 
