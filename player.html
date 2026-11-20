@@ -4,199 +4,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>BattleZone FF - Player Dashboard</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    background:#080808;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding:20px;
 }
 
-body {
-    background: #080808;
-    color: white;
-    font-family: Arial, sans-serif;
-    padding: 20px;
+.container{max-width:1100px;margin:auto}
+
+header{
+    background:#151515;
+    border:1px solid #ff6500;
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:25px;
 }
 
-.container {
-    max-width: 1100px;
-    margin: auto;
+header h1{color:#ff6500;margin-bottom:8px}
+header p{color:#aaa}
+
+.section{
+    background:#151515;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:20px;
 }
 
-header {
-    background: #151515;
-    border: 1px solid #ff6500;
-    border-radius: 12px;
-    padding: 22px;
-    margin-bottom: 25px;
+.section h2{color:#ff6500;margin-bottom:18px}
+
+.profile{display:flex;align-items:center;gap:18px}
+
+.avatar{
+    width:75px;
+    height:75px;
+    background:#ff6500;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
 }
 
-header h1 {
-    color: #ff6500;
-    margin-bottom: 8px;
+.profile h3{margin-bottom:8px}
+
+.muted{
+    color:#aaa;
+    font-size:14px;
+    line-height:1.6;
 }
 
-header p {
-    color: #aaa;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
 }
 
-.section {
-    background: #151515;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 22px;
-    margin-bottom: 20px;
+.stat{
+    background:#202020;
+    padding:18px;
+    border-radius:9px;
 }
 
-.section h2 {
-    color: #ff6500;
-    margin-bottom: 18px;
+.stat h3{
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:10px;
 }
 
-.profile {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+.stat p{
+    color:#ff6500;
+    font-size:19px;
+    font-weight:bold;
+    overflow-wrap:anywhere;
 }
 
-.avatar {
-    width: 75px;
-    height: 75px;
-    background: #ff6500;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
+.status{
+    display:inline-block;
+    padding:8px 13px;
+    border-radius:6px;
+    font-size:13px;
+    font-weight:bold;
 }
 
-.profile h3 {
-    margin-bottom: 8px;
+.Pending{background:#493600;color:#ffc107}
+.Approved{background:#123d22;color:#4ade80}
+.Rejected{background:#4a1717;color:#ff7777}
+
+.room-box{
+    background:#202020;
+    border:1px dashed #ff6500;
+    border-radius:9px;
+    padding:20px;
 }
 
-.muted {
-    color: #aaa;
-    font-size: 14px;
-    line-height: 1.6;
+.room-box p{margin:12px 0}
+
+.room-hidden{color:#aaa;font-style:italic}
+
+.history-item{
+    background:#202020;
+    padding:16px;
+    border-radius:8px;
+    margin-bottom:12px;
 }
 
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+.history-item h3{margin-bottom:7px}
+
+.links{display:flex;gap:12px;flex-wrap:wrap}
+
+.links a,.back{
+    display:inline-block;
+    background:#ff6500;
+    color:white;
+    padding:12px 17px;
+    text-decoration:none;
+    border-radius:7px;
+    font-weight:bold;
 }
 
-.stat {
-    background: #202020;
-    padding: 18px;
-    border-radius: 9px;
+.back{background:#292929;margin-top:5px}
+
+.note{
+    color:#aaa;
+    font-size:13px;
+    line-height:1.6;
+    margin-top:14px;
 }
 
-.stat h3 {
-    color: #aaa;
-    font-size: 14px;
-    margin-bottom: 10px;
+#noRegistration{
+    display:none;
+    color:#ffc107;
+    line-height:1.6;
 }
 
-.stat p {
-    color: #ff6500;
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.status {
-    display: inline-block;
-    padding: 8px 13px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.Pending {
-    background: #493600;
-    color: #ffc107;
-}
-
-.Approved {
-    background: #123d22;
-    color: #4ade80;
-}
-
-.Rejected {
-    background: #4a1717;
-    color: #ff7777;
-}
-
-.room-box {
-    background: #202020;
-    border: 1px dashed #ff6500;
-    border-radius: 9px;
-    padding: 20px;
-}
-
-.room-box p {
-    margin: 12px 0;
-}
-
-.room-hidden {
-    color: #aaa;
-    font-style: italic;
-}
-
-.history-item {
-    background: #202020;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
-
-.history-item h3 {
-    margin-bottom: 7px;
-}
-
-.links {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.links a, .back {
-    display: inline-block;
-    background: #ff6500;
-    color: white;
-    padding: 12px 17px;
-    text-decoration: none;
-    border-radius: 7px;
-    font-weight: bold;
-}
-
-.back {
-    background: #292929;
-    margin-top: 5px;
-}
-
-.note {
-    color: #aaa;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-top: 14px;
-}
-
-@media(max-width:600px) {
-    body {
-        padding: 10px;
-    }
-
-    .section {
-        padding: 16px;
-    }
-
-    .profile {
-        align-items: flex-start;
-    }
+@media(max-width:600px){
+    body{padding:10px}
+    .section{padding:16px}
+    .profile{align-items:flex-start}
 }
 </style>
 </head>
@@ -210,40 +161,31 @@ header p {
     <p>Player Dashboard</p>
 </header>
 
-<!-- 1. Player Profile -->
-
 <div class="section">
-
     <h2>Player Profile</h2>
 
     <div class="profile">
-
         <div class="avatar">🎮</div>
 
         <div>
             <h3 id="playerName">Demo Player</h3>
             <p class="muted">
                 Free Fire UID:
-                <span id="playerUID">DEMO123456</span>
+                <span id="playerUID">Not available</span>
             </p>
             <p class="muted">BattleZone FF Player</p>
         </div>
-
     </div>
-
 </div>
 
-<!-- 2 and 3. Player Details -->
-
 <div class="section">
-
     <h2>My Tournament</h2>
 
     <div class="stats">
 
         <div class="stat">
             <h3>Game Mode</h3>
-            <p id="gameMode">Squad</p>
+            <p id="gameMode">Not registered</p>
         </div>
 
         <div class="stat">
@@ -254,13 +196,18 @@ header p {
         </div>
 
         <div class="stat">
+            <h3>Team Name</h3>
+            <p id="teamName">Not available</p>
+        </div>
+
+        <div class="stat">
             <h3>Tournament Date</h3>
-            <p id="tournamentDate">Not Announced</p>
+            <p>Not Announced</p>
         </div>
 
         <div class="stat">
             <h3>Tournament Time</h3>
-            <p id="tournamentTime">Not Announced</p>
+            <p>Not Announced</p>
         </div>
 
         <div class="stat">
@@ -270,16 +217,22 @@ header p {
 
     </div>
 
+    <p id="noRegistration" class="note">
+        No demo registration found. Homepage par jaakar pehle demo registration submit karo.
+    </p>
 </div>
 
-<!-- 7. Room Details -->
+<div class="section">
+    <h2>Team Members</h2>
+    <div id="teamMembers" class="muted">
+        No team details available.
+    </div>
+</div>
 
 <div class="section">
-
     <h2>Room Details</h2>
 
     <div class="room-box">
-
         <p><strong>Room ID:</strong>
             <span class="room-hidden">Not announced</span>
         </p>
@@ -291,62 +244,33 @@ header p {
         <p class="note">
             Room details are not available in this demo.
         </p>
-
     </div>
-
 </div>
 
-<!-- 8. Tournament History -->
-
 <div class="section">
-
     <h2>Tournament History</h2>
 
     <div class="history-item">
-        <h3>BattleZone FF - Solo</h3>
-        <p class="muted">
-            Map: Bermuda | Status: Demo
+        <h3>BattleZone FF</h3>
+        <p class="muted" id="historyMode">
+            Your tournament registration will appear here.
         </p>
     </div>
-
-    <div class="history-item">
-        <h3>BattleZone FF - Squad</h3>
-        <p class="muted">
-            Map: Bermuda | Status: Demo
-        </p>
-    </div>
-
 </div>
 
-<!-- 9. Results and Leaderboard -->
-
 <div class="section">
-
     <h2>Results & Leaderboard</h2>
 
     <div class="links">
-
-        <a href="results.html">
-            View Results
-        </a>
-
-        <a href="leaderboard.html">
-            View Leaderboard
-        </a>
-
+        <a href="results.html">View Results</a>
+        <a href="leaderboard.html">View Leaderboard</a>
     </div>
-
-    <p class="note">
-        Results and leaderboard pages will be available
-        when those pages are created.
-    </p>
-
 </div>
 
 <p class="note">
-    DEMO ONLY: This dashboard uses fictional sample information.
-    It is not connected to actual player registrations or a server.
-    Room credentials are not provided.
+    DEMO ONLY: This dashboard uses fictional test information
+    stored in this browser. It is not a real player account
+    or secure server system. Room credentials are not provided.
 </p>
 
 <a href="index.html" class="back">
@@ -355,6 +279,155 @@ header p {
 
 </div>
 
+<script>
+
+const STORAGE_KEY = "battlezoneDemoRegistrations";
+
+// READ REGISTRATIONS
+function getRegistrations(){
+    try{
+        const data = JSON.parse(
+            localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
+        return Array.isArray(data) ? data : [];
+
+    }catch(error){
+        console.error("Could not read registrations:",error);
+        return [];
+    }
+}
+
+// DISPLAY PLAYER INFORMATION
+function loadPlayerDashboard(){
+
+    const registrations = getRegistrations();
+
+    const noRegistration =
+        document.getElementById("noRegistration");
+
+    const statusElement =
+        document.getElementById("registrationStatus");
+
+    if(registrations.length === 0){
+
+        noRegistration.style.display = "block";
+
+        document.getElementById("playerName").textContent =
+            "Demo Player";
+
+        document.getElementById("playerUID").textContent =
+            "Not available";
+
+        document.getElementById("gameMode").textContent =
+            "Not registered";
+
+        document.getElementById("teamName").textContent =
+            "Not available";
+
+        statusElement.textContent = "Pending";
+        statusElement.className = "status Pending";
+
+        document.getElementById("teamMembers").textContent =
+            "No team details available.";
+
+        document.getElementById("historyMode").textContent =
+            "No registration found.";
+
+        return;
+    }
+
+    noRegistration.style.display = "none";
+
+    // Latest demo registration
+    const player = registrations[registrations.length - 1];
+
+    const playerName =
+        player.name || player.playerName || player.fullName || "Demo Player";
+
+    const playerUID =
+        player.uid || player.gameUID || player.freeFireUID || "Not available";
+
+    const gameMode =
+        player.mode || "Solo";
+
+    const teamName =
+        player.team || player.teamName || player.gameName || "Not available";
+
+    const status =
+        ["Pending","Approved","Rejected"].includes(player.status)
+        ? player.status
+        : "Pending";
+
+    document.getElementById("playerName").textContent =
+        playerName;
+
+    document.getElementById("playerUID").textContent =
+        playerUID;
+
+    document.getElementById("gameMode").textContent =
+        gameMode;
+
+    document.getElementById("teamName").textContent =
+        teamName;
+
+    statusElement.textContent = status;
+    statusElement.className = "status " + status;
+
+    // TEAM MEMBERS
+    const teamMembers =
+        document.getElementById("teamMembers");
+
+    teamMembers.replaceChildren();
+
+    const teammates =
+        Array.isArray(player.teammates) ? player.teammates : [];
+
+    if(teammates.length === 0){
+
+        teamMembers.textContent =
+            gameMode === "Solo"
+            ? "Solo registration - no teammates."
+            : "No teammate details provided.";
+
+    }else{
+
+        teammates.forEach((mate,index)=>{
+
+            const p = document.createElement("p");
+
+            if(typeof mate === "string"){
+                p.textContent =
+                    "Teammate " + (index+1) + ": " + mate;
+            }else{
+                p.textContent =
+                    "Teammate " + (index+1) + ": " +
+                    (mate.name || "Not provided") +
+                    (mate.uid ? " | UID: " + mate.uid : "");
+            }
+
+            teamMembers.appendChild(p);
+        });
+    }
+
+    document.getElementById("historyMode").textContent =
+        "Mode: " + gameMode +
+        " | Registration Status: " + status;
+}
+
+// LOAD ON PAGE OPEN
+loadPlayerDashboard();
+
+// UPDATE WHEN ADMIN CHANGES STATUS IN ANOTHER TAB
+window.addEventListener("storage",function(event){
+
+    if(event.key === STORAGE_KEY){
+        loadPlayerDashboard();
+    }
+
+});
+
+</script>
+
 </body>
 </html>
-
