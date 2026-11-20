@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BattleZone FF - Admin Dashboard</title>
 
 <style>
@@ -20,10 +21,15 @@ body {
     padding: 20px;
 }
 
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
 header {
     background: #151515;
     border: 1px solid #ff6500;
-    padding: 20px;
+    padding: 22px;
     border-radius: 12px;
     margin-bottom: 25px;
 }
@@ -37,14 +43,9 @@ header p {
     color: #aaa;
 }
 
-.container {
-    max-width: 1100px;
-    margin: auto;
-}
-
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -88,18 +89,31 @@ header p {
     margin-bottom: 20px;
 }
 
-select {
+input, select {
     background: #222;
     color: white;
     padding: 12px;
-    border: 1px solid #ff6500;
+    border: 1px solid #444;
     border-radius: 7px;
+}
+
+input {
+    flex: 1;
+    min-width: 180px;
+}
+
+select {
+    border-color: #ff6500;
+}
+
+.table-wrap {
+    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 650px;
+    min-width: 850px;
 }
 
 th, td {
@@ -113,11 +127,53 @@ th {
 }
 
 .status {
+    display: inline-block;
     padding: 7px 10px;
     border-radius: 5px;
     font-size: 12px;
+}
+
+.Pending {
+    background: #493600;
+    color: #ffc107;
+}
+
+.Approved {
+    background: #123d22;
+    color: #4ade80;
+}
+
+.Rejected {
+    background: #4a1717;
+    color: #ff7777;
+}
+
+button {
+    border: none;
+    padding: 9px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 3px;
+}
+
+.view-btn {
     background: #333;
-    color: #ffb000;
+    color: white;
+}
+
+.approve-btn {
+    background: #16833b;
+    color: white;
+}
+
+.reject-btn {
+    background: #b52b2b;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
 }
 
 .note {
@@ -126,15 +182,50 @@ th {
     margin-top: 15px;
 }
 
-.table-wrap {
-    overflow-x: auto;
-}
-
 .back {
     display: inline-block;
-    margin-top: 15px;
+    margin: 15px 0;
     color: #ff6500;
     text-decoration: none;
+}
+
+/* Details popup */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 10;
+}
+
+.modal-content {
+    background: #191919;
+    border: 1px solid #ff6500;
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.modal-content h2 {
+    color: #ff6500;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    margin: 12px 0;
+    color: #ddd;
+}
+
+.close-btn {
+    background: #ff6500;
+    color: white;
+    width: 100%;
+    margin-top: 15px;
 }
 
 @media(max-width:600px) {
@@ -144,6 +235,10 @@ th {
 
     .panel {
         padding: 12px;
+    }
+
+    .modal-content {
+        padding: 18px;
     }
 }
 </style>
@@ -158,35 +253,55 @@ th {
     <p>Admin Dashboard - Demo Version</p>
 </header>
 
+<!-- Statistics -->
+
 <div class="stats">
 
     <div class="stat-card">
         <h3>Total Registrations</h3>
-        <p id="totalCount">4</p>
+        <p id="totalCount">0</p>
     </div>
 
     <div class="stat-card">
         <h3>Solo</h3>
-        <p id="soloCount">1</p>
+        <p id="soloCount">0</p>
     </div>
 
     <div class="stat-card">
         <h3>Duo</h3>
-        <p id="duoCount">1</p>
+        <p id="duoCount">0</p>
     </div>
 
     <div class="stat-card">
         <h3>Squad</h3>
-        <p id="squadCount">2</p>
+        <p id="squadCount">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Approved</h3>
+        <p id="approvedCount">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Pending</h3>
+        <p id="pendingCount">0</p>
     </div>
 
 </div>
+
+<!-- Registration Management -->
 
 <div class="panel">
 
     <h2>Registration Management</h2>
 
     <div class="controls">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search player or team..."
+        >
 
         <select id="modeFilter">
             <option value="All">All Modes</option>
@@ -205,6 +320,7 @@ th {
     </div>
 
     <div class="table-wrap">
+
         <table>
 
             <thead>
@@ -213,17 +329,20 @@ th {
                     <th>Player / Team</th>
                     <th>Mode</th>
                     <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody id="registrationList"></tbody>
 
         </table>
+
     </div>
 
     <p class="note">
         DEMO ONLY: These are fictional sample registrations.
-        No real player information is stored.
+        Changes are stored only in this browser session.
+        No real player information is stored or transmitted.
     </p>
 
 </div>
@@ -232,14 +351,82 @@ th {
 
 </div>
 
+<!-- View Details Popup -->
+
+<div class="modal" id="detailsModal">
+
+    <div class="modal-content">
+
+        <h2>Registration Details</h2>
+
+        <div id="detailsContent"></div>
+
+        <button class="close-btn" onclick="closeDetails()">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
 <script>
 
+// Fictional sample registrations only
+
 const registrations = [
-    {id: 1, name: "Player Alpha", team: "Team Alpha", mode: "Solo", status: "Pending"},
-    {id: 2, name: "Player Bravo", team: "Team Bravo", mode: "Duo", status: "Approved"},
-    {id: 3, name: "Player Charlie", team: "Team Charlie", mode: "Squad", status: "Pending"},
-    {id: 4, name: "Player Delta", team: "Team Delta", mode: "Squad", status: "Rejected"}
+    {
+        id: 1,
+        name: "Player Alpha",
+        gameName: "Alpha FF",
+        uid: "DEMO1001",
+        team: "Solo Player",
+        mode: "Solo",
+        teammates: [],
+        status: "Pending"
+    },
+    {
+        id: 2,
+        name: "Player Bravo",
+        gameName: "Bravo FF",
+        uid: "DEMO1002",
+        team: "Team Bravo",
+        mode: "Duo",
+        teammates: [
+            {name: "Demo Mate 1", uid: "DEMO2001"}
+        ],
+        status: "Approved"
+    },
+    {
+        id: 3,
+        name: "Player Charlie",
+        gameName: "Charlie FF",
+        uid: "DEMO1003",
+        team: "Team Charlie",
+        mode: "Squad",
+        teammates: [
+            {name: "Demo Mate 1", uid: "DEMO3001"},
+            {name: "Demo Mate 2", uid: "DEMO3002"},
+            {name: "Demo Mate 3", uid: "DEMO3003"}
+        ],
+        status: "Pending"
+    },
+    {
+        id: 4,
+        name: "Player Delta",
+        gameName: "Delta FF",
+        uid: "DEMO1004",
+        team: "Team Delta",
+        mode: "Squad",
+        teammates: [
+            {name: "Demo Mate 1", uid: "DEMO4001"},
+            {name: "Demo Mate 2", uid: "DEMO4002"},
+            {name: "Demo Mate 3", uid: "DEMO4003"}
+        ],
+        status: "Rejected"
+    }
 ];
+
+// Update dashboard statistics
 
 function updateDashboard() {
 
@@ -255,19 +442,45 @@ function updateDashboard() {
     document.getElementById("squadCount").textContent =
         registrations.filter(r => r.mode === "Squad").length;
 
+    document.getElementById("approvedCount").textContent =
+        registrations.filter(r => r.status === "Approved").length;
+
+    document.getElementById("pendingCount").textContent =
+        registrations.filter(r => r.status === "Pending").length;
+
 }
+
+// Display registration list
 
 function displayRegistrations() {
 
-    const mode = document.getElementById("modeFilter").value;
-    const status = document.getElementById("statusFilter").value;
+    const mode =
+        document.getElementById("modeFilter").value;
+
+    const status =
+        document.getElementById("statusFilter").value;
+
+    const search =
+        document.getElementById("searchInput").value.toLowerCase();
 
     const filtered = registrations.filter(r => {
-        return (mode === "All" || r.mode === mode) &&
-               (status === "All" || r.status === status);
+
+        const matchesMode =
+            mode === "All" || r.mode === mode;
+
+        const matchesStatus =
+            status === "All" || r.status === status;
+
+        const matchesSearch =
+            r.name.toLowerCase().includes(search) ||
+            r.team.toLowerCase().includes(search);
+
+        return matchesMode && matchesStatus && matchesSearch;
+
     });
 
-    const list = document.getElementById("registrationList");
+    const list =
+        document.getElementById("registrationList");
 
     list.innerHTML = "";
 
@@ -275,11 +488,49 @@ function displayRegistrations() {
 
         const tr = document.createElement("tr");
 
-        [r.id, r.team, r.mode, r.status].forEach(value => {
-            const td = document.createElement("td");
-            td.textContent = value;
-            tr.appendChild(td);
-        });
+        const id = document.createElement("td");
+        id.textContent = r.id;
+
+        const team = document.createElement("td");
+        team.textContent = r.team;
+
+        const modeCell = document.createElement("td");
+        modeCell.textContent = r.mode;
+
+        const statusCell = document.createElement("td");
+
+        const statusBadge = document.createElement("span");
+        statusBadge.className = "status " + r.status;
+        statusBadge.textContent = r.status;
+
+        statusCell.appendChild(statusBadge);
+
+        const actions = document.createElement("td");
+
+        const viewButton = document.createElement("button");
+        viewButton.className = "view-btn";
+        viewButton.textContent = "View Details";
+        viewButton.addEventListener("click", () => viewDetails(r.id));
+
+        const approveButton = document.createElement("button");
+        approveButton.className = "approve-btn";
+        approveButton.textContent = "Approve";
+        approveButton.addEventListener("click", () => changeStatus(r.id, "Approved"));
+
+        const rejectButton = document.createElement("button");
+        rejectButton.className = "reject-btn";
+        rejectButton.textContent = "Reject";
+        rejectButton.addEventListener("click", () => changeStatus(r.id, "Rejected"));
+
+        actions.appendChild(viewButton);
+        actions.appendChild(approveButton);
+        actions.appendChild(rejectButton);
+
+        tr.appendChild(id);
+        tr.appendChild(team);
+        tr.appendChild(modeCell);
+        tr.appendChild(statusCell);
+        tr.appendChild(actions);
 
         list.appendChild(tr);
 
@@ -287,16 +538,77 @@ function displayRegistrations() {
 
     if (filtered.length === 0) {
         list.innerHTML =
-            '<tr><td colspan="4">No demo registrations found.</td></tr>';
+            '<tr><td colspan="5">No registrations found.</td></tr>';
     }
 
 }
+
+// View registration details
+
+function viewDetails(id) {
+
+    const r = registrations.find(item => item.id === id);
+
+    if (!r) return;
+
+    let teammateHTML = "";
+
+    r.teammates.forEach((mate, index) => {
+
+        teammateHTML += `
+            <p>Teammate ${index + 1}: ${mate.name}</p>
+            <p>UID: ${mate.uid}</p>
+        `;
+
+    });
+
+    document.getElementById("detailsContent").innerHTML = `
+        <p><strong>Player Name:</strong> ${r.name}</p>
+        <p><strong>In-game Name:</strong> ${r.gameName}</p>
+        <p><strong>Free Fire UID:</strong> ${r.uid}</p>
+        <p><strong>Game Mode:</strong> ${r.mode}</p>
+        <p><strong>Team Name:</strong> ${r.team}</p>
+        ${teammateHTML}
+        <p><strong>Status:</strong> ${r.status}</p>
+    `;
+
+    document.getElementById("detailsModal").style.display = "flex";
+
+}
+
+function closeDetails() {
+
+    document.getElementById("detailsModal").style.display = "none";
+
+}
+
+// Approve or reject registration
+
+function changeStatus(id, newStatus) {
+
+    const r = registrations.find(item => item.id === id);
+
+    if (!r) return;
+
+    r.status = newStatus;
+
+    updateDashboard();
+    displayRegistrations();
+
+}
+
+// Filters and search
 
 document.getElementById("modeFilter")
     .addEventListener("change", displayRegistrations);
 
 document.getElementById("statusFilter")
     .addEventListener("change", displayRegistrations);
+
+document.getElementById("searchInput")
+    .addEventListener("input", displayRegistrations);
+
+// Initial display
 
 updateDashboard();
 displayRegistrations();
@@ -305,4 +617,3 @@ displayRegistrations();
 
 </body>
 </html>
-
